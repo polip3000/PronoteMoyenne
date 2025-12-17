@@ -15,7 +15,10 @@ class EtablissementAdapter(
         val nameText: TextView = itemView.findViewById(android.R.id.text1)
         init {
             itemView.setOnClickListener {
-                onItemClick(list[adapterPosition])
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClick(list[position])
+                }
             }
         }
     }

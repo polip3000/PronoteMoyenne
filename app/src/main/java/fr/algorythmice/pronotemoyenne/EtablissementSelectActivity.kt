@@ -36,7 +36,8 @@ class EtablissementSelectActivity : AppCompatActivity() {
         titleetablissement = findViewById(R.id.titleEtablissement)
 
         etablissements =
-            intent.getSerializableExtra("etablissements") as List<Etablissement>
+            intent.getParcelableArrayListExtra<Etablissement>("etablissements") ?: emptyList()
+
 
         val json = Utils.loadJsonFromAssets(this, "etablissements.json")
         allEtablissements = Utils.parseEtablissements(json)

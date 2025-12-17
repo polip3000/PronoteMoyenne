@@ -79,7 +79,10 @@ class MainActivity : AppCompatActivity() {
                                 Log.d("LOC", "Aucun établissement proche trouvé")
                             } else {
                                 val intent = Intent(this, EtablissementSelectActivity::class.java)
-                                intent.putExtra("etablissements", ArrayList(proches))
+                                intent.putParcelableArrayListExtra(
+                                    "etablissements",
+                                    ArrayList(proches)
+                                )
                                 startActivity(intent)
                             }
                         },

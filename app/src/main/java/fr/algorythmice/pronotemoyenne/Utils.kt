@@ -8,7 +8,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlin.math.*
 
 object Utils {
@@ -106,6 +107,7 @@ object Utils {
 }
 
 /* ------------------ DATA ------------------ */
+@Parcelize
 data class Etablissement(
     @SerializedName("appellation_officielle")
     val appellationOfficielle: String,
@@ -118,4 +120,4 @@ data class Etablissement(
 
     @SerializedName("url_pronote")
     val urlPronote: String
-): Serializable
+): Parcelable
