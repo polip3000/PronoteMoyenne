@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_gradient_futuristic"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/cardSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_glass"
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:text="Paramètres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"/>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginTop="25dp"
+            app:boxStrokeColor="#3A7CFF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Identifiant"
+                android:textColor="#FFFFFF"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:boxStrokeColor="#3A7CFF"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mot de passe"
+                android:textColor="#FFFFFF"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/entTextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="#3A7CFF"
+            app:boxStrokeWidth="2dp"
+            app:hintTextColor="#A05BFF">
+
+            <!-- MaterialAutoCompleteTextView fournit la recherche/filtre intégré -->
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/entDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:completionThreshold="1"
+                android:hint="Sélectionner l'ENT"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/selectEtablissementBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trouver_mon_tablissement"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_neon"
+            app:backgroundTint="@null"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:text="Enregistrer"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_neon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@null"
+            android:layout_marginTop="25dp"/>
+
+        <Button
+            android:id="@+id/resetBtn"
+            android:text="Réinitialiser"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_neon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@null"
+            android:layout_marginTop="12dp"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">PronoteMoyenne</string>
+    <string name="trouver_mon_tablissement">Trouver mon établissement</string>
+    <string name="s_lectionner_l_ent">Sélectionner l\'ENT</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="identifiant">Identifiant</string>
+    <string name="connexion">Connexion</string>
+    <string name="se_connecter">Se connecter</string>
+    <string name="tablissements_proches">Établissements proches</string>
+    <string name="nom_de_l_tablissement">Nom de l\'établissement</string>
+    <string name="rechercher_manuellement">Rechercher manuellement</string>
+    <string name="rechercher_avec_la_position">rechercher avec la position</string>
+    <string name="recherche_tablissement">Recherche Établissement</string>
+    <string name="veuillez_remplir_les_champs">Veuillez remplir les champs</string>
+</resources>
