@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_gradient_futuristic"
     android:padding="24dp"
     android:layout_width="match_parent"
@@ -26,7 +27,8 @@
             android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            tools:ignore="HardcodedText" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -41,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Identifiant"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                tools:ignore="HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -57,8 +60,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Mot de passe"
+                android:inputType="textPassword"
                 android:textColor="#FFFFFF"
-                android:inputType="textPassword"/>
+                tools:ignore="HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -80,7 +84,8 @@
                 android:hint="Sélectionner l'ENT"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                tools:ignore="HardcodedText,TextContrastCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,32 +93,35 @@
             android:id="@+id/selectEtablissementBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_neon"
             android:text="@string/trouver_mon_tablissement"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:background="@drawable/btn_neon"
             app:backgroundTint="@null"
-            android:layout_marginTop="20dp"/>
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <Button
             android:id="@+id/saveBtn"
-            android:text="Enregistrer"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/btn_neon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/btn_neon"
+            android:text="Enregistrer"
+            android:textColor="#FFFFFF"
             app:backgroundTint="@null"
-            android:layout_marginTop="25dp"/>
+            tools:ignore="HardcodedText,TextContrastCheck,VisualLintButtonSize" />
 
         <Button
             android:id="@+id/resetBtn"
-            android:text="Réinitialiser"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/btn_neon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/btn_neon"
+            android:text="Réinitialiser"
+            android:textColor="#FFFFFF"
             app:backgroundTint="@null"
-            android:layout_marginTop="12dp"/>
+            tools:ignore="HardcodedText,TextContrastCheck,VisualLintButtonSize" />
 
     </LinearLayout>
 

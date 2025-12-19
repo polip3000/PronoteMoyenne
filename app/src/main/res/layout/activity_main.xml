@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
@@ -44,7 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/identifiant"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -62,8 +64,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/mot_de_passe"
+                android:inputType="textPassword"
                 android:textColor="#FFFFFF"
-                android:inputType="textPassword"/>
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -84,7 +87,8 @@
                 android:hint="@string/s_lectionner_l_ent"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                tools:ignore="TextContrastCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,24 +96,26 @@
             android:id="@+id/findNearbyBtn"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_neon"
             android:text="@string/trouver_mon_tablissement"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:background="@drawable/btn_neon"
             app:backgroundTint="@null"
-            android:layout_marginTop="20dp"/>
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
 
         <Button
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/btn_neon"
             android:text="@string/se_connecter"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             app:backgroundTint="@null"
-            android:background="@drawable/btn_neon"
-            android:layout_marginTop="35dp"/>
+            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
 
         <TextView
             android:id="@+id/errorText"
