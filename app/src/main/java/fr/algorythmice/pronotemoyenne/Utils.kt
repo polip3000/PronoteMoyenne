@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken
 import android.os.Parcelable
 import com.chaquo.python.Python
 import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
+import fr.algorythmice.pronotemoyenne.infos.InfosCacheStorage
 import kotlinx.parcelize.Parcelize
 import kotlin.math.*
 
@@ -137,7 +138,6 @@ object Utils {
                 ent
             )
 
-            // 🔥 DÉSTRUCTURATION DU TUPLE PYTHON
             val resultList = result.asList()
 
             val rawGrades = resultList[0].toString()
@@ -146,7 +146,10 @@ object Utils {
             val studentName = resultList[3].toString()
 
             val parsed = parseAndComputeNotes(rawGrades)
+            // ENREGISTREMENT DES DONNÉES
             NotesCacheStorage.saveNotes(context, parsed)
+            InfosCacheStorage.save(context, className, establishment, studentName)
+
             NotesResult(parsed)
 
         } catch (e: Exception) {

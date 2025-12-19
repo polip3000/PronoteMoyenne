@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
 import fr.algorythmice.pronotemoyenne.R
 import fr.algorythmice.pronotemoyenne.SettingsActivity
 import fr.algorythmice.pronotemoyenne.Utils

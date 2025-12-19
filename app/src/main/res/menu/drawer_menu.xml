@@ -7,5 +7,10 @@
             android:title="Notes"
             android:icon="@drawable/logo"/>
 
+        <item
+            android:id="@+id/nav_profil"
+            android:title="Profil"
+            android:icon="@drawable/logo"/>
+
     </group>
 </menu>

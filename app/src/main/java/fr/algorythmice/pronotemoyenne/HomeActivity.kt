@@ -6,6 +6,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import fr.algorythmice.pronotemoyenne.grades.NotesFragment
+import fr.algorythmice.pronotemoyenne.infos.InfosFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -16,7 +17,6 @@ class HomeActivity : AppCompatActivity() {
         val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navView = findViewById<NavigationView>(R.id.navigationView)
 
-        // Fragment par défaut
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, NotesFragment())
             .commit()
@@ -26,6 +26,10 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_notes -> {
                     openFragment(NotesFragment())
                 }
+                R.id.nav_profil -> {
+                    openFragment(InfosFragment())
+                }
+
             }
             drawer.closeDrawers()
             true
