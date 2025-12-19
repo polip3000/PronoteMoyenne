@@ -4,13 +4,11 @@
 
         <item
             android:id="@+id/nav_notes"
-            android:title="Notes"
-            android:icon="@drawable/logo"/>
+            android:title="Notes" />
 
         <item
             android:id="@+id/nav_profil"
-            android:title="Profil"
-            android:icon="@drawable/logo"/>
+            android:title="Profil" />
 
     </group>
 </menu>

@@ -7,7 +7,7 @@ import androidx.core.content.edit
 
 object InfosCacheStorage {
 
-    private const val PREF_NAME = "notes_cache_prefs"
+    private const val PREF_NAME = "infos_cache_prefs"
     private const val KEY_CLASS_NAME = "class_name"
     private const val KEY_ESTABLISHMENT = "establishment"
     private const val KEY_STUDENT_NAME = "studentName"

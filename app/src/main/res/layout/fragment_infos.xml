@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,17 +6,33 @@
     android:padding="20dp"
     android:background="@drawable/bg_gradient_futuristic">
 
-    <!-- Titre -->
+    <!-- Bouton menu à gauche -->
+    <ImageButton
+        android:id="@+id/menuBtn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:background="@drawable/bg_glass"
+        android:padding="6dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_menu"
+        app:tint="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <!-- Titre centré horizontalement -->
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
         android:text="Infos personnelles"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/menuBtn"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Carte Glass -->
     <LinearLayout

@@ -7,10 +7,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import fr.algorythmice.pronotemoyenne.HomeActivity
 import fr.algorythmice.pronotemoyenne.R
 import fr.algorythmice.pronotemoyenne.SettingsActivity
 import fr.algorythmice.pronotemoyenne.Utils
@@ -37,10 +40,16 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
             Python.start(AndroidPlatform(requireContext()))
         }
 
+
         bind.settingsBtn.setOnClickListener {
-            startActivity(
-                Intent(requireContext(), SettingsActivity::class.java)
-            )
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            (requireActivity() as HomeActivity).settingsLauncher.launch(intent)
+        }
+
+        bind.menuBtn.setOnClickListener {
+            (requireActivity() as HomeActivity)
+                .findViewById<DrawerLayout>(R.id.drawerLayout)
+                .openDrawer(GravityCompat.START)
         }
 
         loadNotes()
@@ -77,6 +86,11 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 delay(60000)
             }
         }
+    }
+
+    fun reloadNotes() {
+        updateTimerJob?.cancel()
+        loadNotes()
     }
 
     private fun loadNotes() {

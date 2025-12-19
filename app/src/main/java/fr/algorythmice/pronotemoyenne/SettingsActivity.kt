@@ -29,6 +29,11 @@ class SettingsActivity : AppCompatActivity() {
         bind.password.setText(LoginStorage.getPass(this))
         bind.entDropdown.setText(LoginStorage.getEnt(this))
 
+        /* ---------- Configuration des propriétés des champs de saisie ---------- */
+        bind.username.isSingleLine = true
+        bind.username.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+        bind.password.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+
         /* ---------- Bouton save désactivé ---------- */
 
         bind.saveBtn.isEnabled = false
@@ -54,7 +59,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         bind.entDropdown.setOnItemClickListener { _, _, _, _ ->
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(bind.entDropdown.windowToken, 0)
         }
 

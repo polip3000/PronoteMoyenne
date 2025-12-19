@@ -49,6 +49,11 @@ class MainActivity : AppCompatActivity() {
                 updateLoginButtonState()
             }
 
+            //configuration des propriétés des champs de saisie
+            bind.username.isSingleLine = true
+            bind.username.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+            bind.password.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+
 
             val json = Utils.loadJsonFromAssets(this, "etablissements.json")
             val etablissements = Utils.parseEtablissements(json)

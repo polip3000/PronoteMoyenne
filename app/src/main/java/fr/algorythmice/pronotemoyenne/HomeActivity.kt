@@ -1,6 +1,7 @@
 package fr.algorythmice.pronotemoyenne
 
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -18,16 +19,17 @@ class HomeActivity : AppCompatActivity() {
         val navView = findViewById<NavigationView>(R.id.navigationView)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, NotesFragment())
+            .replace(R.id.fragmentContainer, NotesFragment(), "notesFragment")
             .commit()
+
 
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_notes -> {
                     openFragment(NotesFragment())
                 }
-                R.id.nav_profil -> {
-                    openFragment(InfosFragment())
+                R.id.nav_notes -> {
+                    openFragment(NotesFragment(), "notesFragment")
                 }
 
             }
@@ -35,10 +37,18 @@ class HomeActivity : AppCompatActivity() {
             true
         }
     }
-
-    private fun openFragment(fragment: Fragment) {
+    val settingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            val fragment = supportFragmentManager.findFragmentByTag("notesFragment") as? NotesFragment
+            fragment?.reloadNotes()
+        }
+    }
+    private fun openFragment(fragment: Fragment, tag: String? = null) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
+            .replace(R.id.fragmentContainer, fragment, tag)
             .commit()
     }
+
 }

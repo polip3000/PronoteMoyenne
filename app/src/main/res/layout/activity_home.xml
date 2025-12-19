@@ -17,7 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@drawable/bg_gradient_futuristic3"
         app:menu="@menu/drawer_menu"
+        app:itemBackground="@drawable/bg_gradient_futuristic4"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"/>
 </androidx.drawerlayout.widget.DrawerLayout>
