@@ -112,17 +112,6 @@
             app:backgroundTint="@null"
             tools:ignore="HardcodedText,TextContrastCheck,VisualLintButtonSize" />
 
-        <Button
-            android:id="@+id/resetBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/btn_neon"
-            android:text="Réinitialiser"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@null"
-            tools:ignore="HardcodedText,TextContrastCheck,VisualLintButtonSize" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

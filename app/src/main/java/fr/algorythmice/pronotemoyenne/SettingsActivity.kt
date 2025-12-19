@@ -103,12 +103,6 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        bind.resetBtn.setOnClickListener {
-            LoginStorage.clear(this)
-            setResult(RESULT_OK)
-            finish()
-        }
-
         updateSaveButtonState()
     }
 
