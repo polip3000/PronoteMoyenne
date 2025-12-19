@@ -1,5 +1,6 @@
 package fr.algorythmice.pronotemoyenne
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ class EtablissementAdapter(
         holder.nameText.text = list[position].appellationOfficielle
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateList(newList: List<Etablissement>) {
         list = newList
         notifyDataSetChanged()

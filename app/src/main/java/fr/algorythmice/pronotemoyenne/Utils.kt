@@ -116,7 +116,7 @@ object Utils {
         val error: String? = null
     )
 
-    suspend fun fetchAndParseNotes(context: Context): NotesResult {
+    fun fetchAndParseNotes(context: Context): NotesResult {
         val user = LoginStorage.getUser(context)
         val pass = LoginStorage.getPass(context)
         val ent = LoginStorage.getEnt(context)
@@ -152,7 +152,7 @@ object Utils {
 
             NotesResult(parsed)
 
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             NotesResult(emptyMap(), "Erreur réseau ou Pronote")
         }
     }

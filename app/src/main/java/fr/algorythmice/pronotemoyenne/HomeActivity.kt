@@ -26,10 +26,10 @@ class HomeActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_notes -> {
-                    openFragment(NotesFragment())
-                }
-                R.id.nav_notes -> {
                     openFragment(NotesFragment(), "notesFragment")
+                }
+                R.id.nav_profil -> {
+                    openFragment(InfosFragment())
                 }
 
             }
@@ -40,7 +40,7 @@ class HomeActivity : AppCompatActivity() {
     val settingsLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             val fragment = supportFragmentManager.findFragmentByTag("notesFragment") as? NotesFragment
             fragment?.reloadNotes()
         }

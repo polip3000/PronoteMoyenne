@@ -1,5 +1,6 @@
 package fr.algorythmice.pronotemoyenne.grades
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -61,6 +62,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         _bind = null
     }
 
+    @SuppressLint("SetTextI18n")
     private fun startUpdateTimer(lastUpdateMillis: Long) {
         updateTimerJob?.cancel()
 
@@ -127,6 +129,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n", "UseKtx")
     private fun displayNotesFuturistic(parsed: Map<String, List<Pair<Double, Double>>>) {
         bind.notesContainer.removeAllViews()
 
