@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import android.os.Parcelable
+import com.chaquo.python.Python
 import kotlinx.parcelize.Parcelize
 import kotlin.math.*
 
@@ -92,6 +93,8 @@ object Utils {
             }
     }
 
+    /* ------------------ DETECTION IDENTIFIANTS ------------------ */
+
     fun isLoginComplete(
         user: String?,
         pass: String?,
@@ -104,6 +107,104 @@ object Utils {
                 && !urlPronote.isNullOrBlank()
     }
 
+    /* ------------------ CALL PRONOTEPY ------------------ */
+
+    data class NotesResult(
+        val notes: Map<String, List<Pair<Double, Double>>>,
+        val error: String? = null
+    )
+
+    suspend fun fetchAndParseNotes(context: Context): NotesResult {
+        val user = LoginStorage.getUser(context)
+        val pass = LoginStorage.getPass(context)
+        val ent = LoginStorage.getEnt(context)
+        val pronoteUrl = LoginStorage.getUrlPronote(context)
+
+        if (!isLoginComplete(user, pass, ent, pronoteUrl)) {
+            return NotesResult(emptyMap(), "Identifiants incomplets")
+        }
+
+        return try {
+            val py = Python.getInstance()
+            val module = py.getModule("pronote_fetch")
+
+            val result = module.callAttr(
+                "get_notes",
+                pronoteUrl,
+                user,
+                pass,
+                ent
+            )
+
+            // 🔥 DÉSTRUCTURATION DU TUPLE PYTHON
+            val resultList = result.asList()
+
+            val rawGrades = resultList[0].toString()
+            val className = resultList[1].toString()
+            val establishment = resultList[2].toString()
+            val studentName = resultList[3].toString()
+
+            val parsed = parseAndComputeNotes(rawGrades)
+            NotesCacheStorage.saveNotes(context, parsed)
+            NotesResult(parsed)
+
+        } catch (e: Exception) {
+            NotesResult(emptyMap(), "Erreur réseau ou Pronote")
+        }
+    }
+
+    /* ------------------ PARSE DATA ------------------ */
+
+    private fun parseAndComputeNotes(raw: String): Map<String, List<Pair<Double, Double>>> {
+        val result = mutableMapOf<String, MutableList<Pair<Double, Double>>>()
+        val lines = raw.lines()
+        var currentSubject = ""
+        var notes = mutableListOf<Pair<Double, Double>>()
+
+        for (line in lines) {
+            val trimmed = line.trim()
+
+            if (trimmed.startsWith("Matière :")) {
+                if (notes.isNotEmpty()) {
+                    result[currentSubject] = notes
+                    notes = mutableListOf()
+                }
+                currentSubject = trimmed.removePrefix("Matière :").trim()
+
+            } else if (trimmed.isNotEmpty() && !trimmed.contains("abs", true)) {
+
+                val match =
+                    Regex("""([\d.,]+)/(\d+)\s*\(coef:\s*([\d.,]+)\)""")
+                        .find(trimmed)
+
+                if (match != null) {
+                    val (noteStr, surStr, coefStr) = match.destructured
+                    val note = noteStr.replace(",", ".").toDouble()
+                    val sur = surStr.toDouble()
+                    val coef = coefStr.replace(",", ".").toDouble()
+
+                    val note20 = if (sur != 20.0) note * 20 / sur else note
+                    val coefFinal = if (sur != 20.0) coef * sur / 20 else coef
+
+                    notes.add(note20 to coefFinal)
+                }
+            }
+        }
+
+        if (notes.isNotEmpty()) {
+            result[currentSubject] = notes
+        }
+
+        return result
+    }
+
+    /* ------------------ COMPUTE GENERAL AVERAGE ------------------ */
+
+    fun computeGeneralAverage(parsed: Map<String, List<Pair<Double, Double>>>): Double {
+        return parsed.map { (_, notes) ->
+            notes.sumOf { it.first * it.second } / notes.sumOf { it.second }
+        }.average()
+    }
 }
 
 /* ------------------ DATA ------------------ */

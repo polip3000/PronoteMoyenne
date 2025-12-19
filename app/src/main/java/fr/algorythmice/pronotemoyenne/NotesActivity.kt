@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 class NotesActivity : AppCompatActivity() {
 
     private lateinit var bind: ActivityNotesBinding
+    private var updateTimerJob: kotlinx.coroutines.Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,34 @@ class NotesActivity : AppCompatActivity() {
         loadNotes()
     }
 
+    private fun startUpdateTimer(lastUpdateMillis: Long) {
+        updateTimerJob?.cancel() // annule un éventuel timer précédent
+
+        updateTimerJob = lifecycleScope.launch {
+            while (true) {
+                val diffMs = System.currentTimeMillis() - lastUpdateMillis
+                val diffMin = diffMs / 60000
+                val diffHour = diffMin / 60
+                val diffDay = diffHour / 24
+                val diffMonth = diffDay / 30
+                val diffYear = diffDay / 365
+
+                val text = when {
+                    diffMin < 1 -> "Mis à jour à l’instant"
+                    diffMin < 60 -> "Mis à jour il y a $diffMin min"
+                    diffHour < 24 -> "Mis à jour il y a $diffHour h"
+                    diffDay < 30 -> "Mis à jour il y a $diffDay jour${if (diffDay > 1) "s" else ""}"
+                    diffMonth < 12 -> "Mis à jour il y a $diffMonth mois"
+                    else -> "Mis à jour il y a $diffYear an${if (diffYear > 1) "s" else ""}"
+                }
+
+                bind.titleText.text = "Mes Notes\n$text"
+
+                kotlinx.coroutines.delay(60000) // mise à jour toutes les minutes
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100) {
@@ -48,134 +77,48 @@ class NotesActivity : AppCompatActivity() {
     }
 
     private fun loadNotes() {
-        val user = LoginStorage.getUser(this)
-        val pass = LoginStorage.getPass(this)
-        val ent = LoginStorage.getEnt(this)
-        val pronoteUrl = LoginStorage.getUrlPronote(this)
-
-
-
         bind.loading.visibility = View.VISIBLE
-        bind.notesContainer.removeAllViews()
         bind.noteText.visibility = View.GONE
+        bind.notesContainer.removeAllViews()
 
-        if (user.isNullOrEmpty() || pass.isNullOrEmpty() || ent.isNullOrEmpty()) {
-            bind.loading.visibility = View.GONE
-            bind.noteText.apply {
-                visibility = View.VISIBLE
-                text = "Erreur : identifiants ou ent non fournis ou invalides."
-                setTextColor(Color.RED)
-                textSize = 18f
-            }
-            return
+        //Affichage du cache si présent
+        val cached = NotesCacheStorage.loadNotes(this)
+        if (cached != null && cached.isNotEmpty()) {
+            displayNotesFuturistic(cached)
+            val lastUpdate = NotesCacheStorage.getLastUpdate(this)
+            startUpdateTimer(lastUpdate) // lance le timer pour le cache
+            bind.loading.visibility = View.VISIBLE
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            val rawResult = withContext(Dispatchers.IO) {
-                try {
-                    val py = Python.getInstance()
-                    val module = py.getModule("pronote_fetch")
-                    module.callAttr(
-                        "get_notes",
-                        pronoteUrl,
-                        user,
-                        pass,
-                        ent
-                    ).toString()
-                } catch (_: Exception) {
-                    null
-                }
+        //Récupération des nouvelles notes
+        lifecycleScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                Utils.fetchAndParseNotes(this@NotesActivity)
             }
 
             bind.loading.visibility = View.GONE
 
-            if (rawResult == null) {
+            if (result.error != null) {
                 bind.noteText.apply {
                     visibility = View.VISIBLE
-                    text = "Erreur : impossible de récupérer les notes. Vérifiez votre connexion réseau. Ou vos identifiants"
+                    text = result.error
                     setTextColor(Color.RED)
-                    textSize = 18f
-                }
-            } else if (rawResult.contains("Erreur", ignoreCase = true)) {
-                bind.noteText.apply {
-                    visibility = View.VISIBLE
-                    text = "Erreur : identifiants incorrects ou session expirée."
-                    setTextColor(Color.RED)
-                    textSize = 18f
                 }
             } else {
-                try {
-                    val parsedNotes = parseAndComputeNotes(rawResult) // ta fonction qui retourne Map<String, List<Pair<Double, Double>>>
-                    displayNotesFuturistic(parsedNotes)
-                } catch (e: Exception) {
-                    bind.noteText.apply {
-                        visibility = View.VISIBLE
-                        text = "Erreur lors du traitement des notes : ${e.message}"
-                        setTextColor(Color.RED)
-                        textSize = 18f
-                    }
-                }
+                displayNotesFuturistic(result.notes)
+
+                // sauvegarde du cache et mise à jour immédiate
+                NotesCacheStorage.saveNotes(this@NotesActivity, result.notes)
+                val now = System.currentTimeMillis()
+                startUpdateTimer(now) // relance le timer avec "Mis à jour maintenant"
             }
         }
-    }
-
-    private fun parseAndComputeNotes(raw: String): Map<String, List<Pair<Double, Double>>> {
-        val result = mutableMapOf<String, MutableList<Pair<Double, Double>>>()
-        val lines = raw.lines()
-        var currentSubject = ""
-        var notes = mutableListOf<Pair<Double, Double>>()
-
-        for (line in lines) {
-            val trimmed = line.trim()
-            if (trimmed.startsWith("Matière :")) {
-                if (notes.isNotEmpty()) {
-                    result[currentSubject] = notes
-                    notes = mutableListOf()
-                }
-                currentSubject = trimmed.removePrefix("Matière :").trim()
-            } else if (trimmed.isNotEmpty() && !trimmed.contains("abs", ignoreCase = true)) {
-                val noteMatch = Regex("""([\d.,]+)/(\d+)\s*\(coef:\s*([\d.,]+)\)""").find(trimmed)
-                if (noteMatch != null) {
-                    val (noteStr, surStr, coefStr) = noteMatch.destructured
-                    val note = noteStr.replace(",", ".").toDouble()
-                    val sur = surStr.toDouble()
-                    val coef = coefStr.replace(",", ".").toDouble()
-
-                    val noteSur20: Double
-                    val coefFinal: Double
-                    if (sur != 20.0) {
-                        noteSur20 = note * 20 / sur
-                        coefFinal = coef * sur / 20
-                    } else {
-                        noteSur20 = note
-                        coefFinal = coef
-                    }
-
-                    notes.add(noteSur20 to coefFinal)
-                }
-            }
-        }
-
-        if (notes.isNotEmpty()) {
-            result[currentSubject] = notes
-        }
-
-        return result
-    }
-
-    private fun computeGeneralAverage(parsed: Map<String, List<Pair<Double, Double>>>): Double {
-        val subjectAverages = parsed.map { (_, notes) ->
-            val moyenneMatiere = notes.sumOf { it.first * it.second } / notes.sumOf { it.second }
-            moyenneMatiere
-        }
-
-        return subjectAverages.average()
     }
 
     private fun displayNotesFuturistic(parsed: Map<String, List<Pair<Double, Double>>>) {
         bind.notesContainer.removeAllViews()
 
-        val moyenneGenerale = computeGeneralAverage(parsed)
+        val moyenneGenerale = Utils.computeGeneralAverage(parsed)
 
         val generalCard = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL

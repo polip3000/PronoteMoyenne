@@ -17,11 +17,15 @@ def get_notes(url, username, password, ent):
         nom_matiere = grade.subject.name
         notes_par_matiere[nom_matiere].append(grade)
 
-    output = ""
+    grade = ""
 
     for matiere, grades in notes_par_matiere.items():
-        output += f"\nMatière : {matiere}\n"
+        grade += f"\nMatière : {matiere}\n"
         for g in grades:
-            output += f"{g.grade}/{g.out_of}  (coef: {g.coefficient})\n"
+            grade += f"{g.grade}/{g.out_of}  (coef: {g.coefficient})\n"
 
-    return output
+    class_name = client.info.class_name
+    establishment = client.info.establishment
+    name = client.info.name
+
+    return grade, class_name, establishment, name
