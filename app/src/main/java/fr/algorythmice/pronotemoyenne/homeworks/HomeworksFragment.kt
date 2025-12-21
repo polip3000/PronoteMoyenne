@@ -22,6 +22,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.core.graphics.toColorInt
 
 class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
@@ -98,6 +99,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     private fun displayHomeworks(
         parsed: Map<String, Map<String, List<String>>>
@@ -116,7 +118,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             }
 
             card.addView(TextView(requireContext()).apply {
-                text = date
+                text = Utils.formatDateFr(date)
                 setTextColor(Color.CYAN)
                 textSize = 22f
                 setTypeface(typeface, Typeface.BOLD)
@@ -134,7 +136,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
                 list.forEach {
                     card.addView(TextView(requireContext()).apply {
                         text = "• $it"
-                        setTextColor(Color.parseColor("#E8ECF2"))
+                        setTextColor("#E8ECF2".toColorInt())
                         textSize = 16f
                         setPadding(10, 5, 0, 5)
                     })
