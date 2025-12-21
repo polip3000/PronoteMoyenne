@@ -16,17 +16,17 @@ import androidx.lifecycle.lifecycleScope
 import fr.algorythmice.pronotemoyenne.HomeActivity
 import fr.algorythmice.pronotemoyenne.R
 import fr.algorythmice.pronotemoyenne.Utils
-import fr.algorythmice.pronotemoyenne.databinding.FragmentNotesBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.graphics.toColorInt
+import fr.algorythmice.pronotemoyenne.databinding.FragmentHomeworksBinding
 
 class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
-    private var _bind: FragmentNotesBinding? = null
+    private var _bind: FragmentHomeworksBinding? = null
     private val bind get() = _bind!!
 
     private var updateTimerJob: Job? = null
@@ -34,7 +34,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _bind = FragmentNotesBinding.bind(view)
+        _bind = FragmentHomeworksBinding.bind(view)
 
         bind.menuBtn.setOnClickListener {
             (requireActivity() as HomeActivity)

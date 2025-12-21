@@ -19,33 +19,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Bouton settings à droite -->
-    <ImageButton
-        android:id="@+id/settingsBtn"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_glass"
-        android:padding="6dp"
-        android:src="@android:drawable/ic_menu_manage"
-        app:tint="#FFFFFF"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
     <!-- Titre centré horizontalement -->
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Mes Devoirs"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/menuBtn"
-        app:layout_constraintEnd_toStartOf="@id/settingsBtn"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/loading"
