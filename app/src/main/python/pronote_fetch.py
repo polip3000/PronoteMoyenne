@@ -4,6 +4,8 @@ from pronotepy import Client
 from pronotepy.ent import *
 
 def get_notes(url, username, password, ent):
+
+    # ------------ CONNECT CLIENT ------------
     try:
         ent_class = globals()[ent]
     except KeyError:
@@ -12,7 +14,7 @@ def get_notes(url, username, password, ent):
     client = Client(url, username=username, password=password, ent=ent_class)
     period = client.current_period
 
-    # ---------------- NOTES ----------------
+    # ---------------- GRADES ----------------
 
     notes_par_matiere = defaultdict(list)
 
@@ -30,7 +32,7 @@ def get_notes(url, username, password, ent):
     establishment = client.info.establishment
     name = client.info.name
 
-    # ---------------- DEVOIRS ----------------
+    # ---------------- HOMEWORKS ----------------
     date_from = datetime.date.today()
 
     homework_text = ""
@@ -40,5 +42,4 @@ def get_notes(url, username, password, ent):
         homework_text += f"Matière : {hw.subject.name}\n"
         homework_text += f"{hw.description.strip()}\n"
 
-    # ⚠️ ORDRE IMPORTANT POUR KOTLIN
     return grade_text, class_name, establishment, name, homework_text

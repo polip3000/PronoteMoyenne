@@ -16,7 +16,6 @@ import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksCacheStorage
 import fr.algorythmice.pronotemoyenne.infos.InfosCacheStorage
 import kotlinx.parcelize.Parcelize
-import java.time.LocalDate
 import kotlin.math.*
 
 object Utils {
@@ -246,6 +245,22 @@ object Utils {
         }
 
         return result
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatDateFr(dateStr: String): String {
+        return try {
+            val inputFormatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val outputFormatter = java.time.format.DateTimeFormatter.ofPattern(
+                "d MMMM yyyy",
+                java.util.Locale.FRENCH
+            )
+
+            val date = java.time.LocalDate.parse(dateStr, inputFormatter)
+            date.format(outputFormatter)
+        } catch (e: Exception) {
+            dateStr // fallback si jamais la date est invalide
+        }
     }
 
     /* ------------------ COMPUTE GENERAL AVERAGE ------------------ */
