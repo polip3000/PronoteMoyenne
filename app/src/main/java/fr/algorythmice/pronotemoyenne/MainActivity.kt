@@ -60,17 +60,27 @@ class MainActivity : AppCompatActivity() {
 
             val locationPermissionLauncher =
                 registerForActivityResult(
-                    androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
-                ) { granted ->
+                    androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions()
+                ) { permissions ->
+
+                    val granted = permissions.any { it.value }
+
                     if (granted) {
                         bind.findNearbyBtn.performClick()
                     } else {
-                        Log.d("LOC", "Permission non accordée")
+                        // Permission refusée → recherche manuelle directe
+                        openManualSearch()
                     }
                 }
 
+
             fun requestLocationPermission() {
-                locationPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                locationPermissionLauncher.launch(
+                    arrayOf(
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
             }
 
             bind.findNearbyBtn.setOnClickListener {
@@ -141,6 +151,16 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateLoginButtonState()
+    }
+
+    private fun openManualSearch() {
+        val intent = Intent(this, EtablissementSelectActivity::class.java)
+        intent.putParcelableArrayListExtra(
+            "etablissements",
+            arrayListOf()
+        )
+        intent.putExtra("forceManual", true)
+        startActivity(intent)
     }
 
 

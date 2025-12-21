@@ -67,8 +67,10 @@ class SettingsActivity : AppCompatActivity() {
         val json = Utils.loadJsonFromAssets(this, "etablissements.json")
         val etablissements = Utils.parseEtablissements(json)
 
+        val hasLocationPermission = Utils.hasLocationPermission(this)
+
         bind.selectEtablissementBtn.setOnClickListener {
-            if (Utils.hasLocationPermission(this)) {
+            if (hasLocationPermission) {
                 Utils.getLastLocation(
                     this,
                     onSuccess = { lat, lon ->
@@ -76,14 +78,22 @@ class SettingsActivity : AppCompatActivity() {
 
                         if (proches.isNotEmpty()) {
                             val intent = Intent(this, EtablissementSelectActivity::class.java)
-                            intent.putExtra("etablissements", ArrayList(proches))
+                            intent.putParcelableArrayListExtra("etablissements", ArrayList(proches))
                             startActivity(intent)
                         }
                     },
                     onError = { Log.d("LOC", it) }
                 )
             } else {
-                requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                // Pas de permission → recherche manuelle forcée
+                val intent = Intent(this, EtablissementSelectActivity::class.java)
+                intent.putParcelableArrayListExtra("etablissements", arrayListOf())
+                intent.putExtra("forceManual", true)
+                startActivity(intent)
+                // Désactiver le bouton pour feedback visuel
+                bind.selectEtablissementBtn.isEnabled = false
+                bind.selectEtablissementBtn.alpha = 0.4f
+                android.widget.Toast.makeText(this, "La localisation n'est pas autorisée", android.widget.Toast.LENGTH_SHORT).show()
             }
         }
 

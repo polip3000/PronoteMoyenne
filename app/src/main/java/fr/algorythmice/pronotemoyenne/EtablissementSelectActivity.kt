@@ -38,6 +38,8 @@ class EtablissementSelectActivity : AppCompatActivity() {
         etablissements =
             intent.getParcelableArrayListExtra<Etablissement>("etablissements") ?: emptyList()
 
+        val forceManual = intent.getBooleanExtra("forceManual", false)
+        val hasLocationPermission = Utils.hasLocationPermission(this)
 
         val json = Utils.loadJsonFromAssets(this, "etablissements.json")
         allEtablissements = Utils.parseEtablissements(json)
@@ -59,12 +61,34 @@ class EtablissementSelectActivity : AppCompatActivity() {
         }
 
         // Liste par défaut : établissements proches
-        showList(etablissements)
+        if (forceManual || etablissements.isEmpty() || !hasLocationPermission) {
+            // Mode recherche manuelle direct
+            searchInput.visibility = View.VISIBLE
+            manualSearchBtn.visibility = View.GONE
+            positionSearchBtn.visibility = View.VISIBLE
+            titleetablissement.text = getString(R.string.recherche_tablissement)
 
-        // Champ de recherche caché par défaut
-        searchInput.visibility = View.GONE
-        manualSearchBtn.visibility = View.VISIBLE
-        positionSearchBtn.visibility = View.GONE
+            positionSearchBtn.apply {
+                isEnabled = false
+                alpha = 0.4f
+            }
+
+            adapter = EtablissementAdapter(allEtablissements) { selected ->
+                LoginStorage.saveUrlPronote(this, selected.urlPronote)
+                Toast.makeText(this, "Établissement enregistré", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapter
+
+            searchInput.requestFocus()
+        } else {
+            // Mode établissements proches
+            showList(etablissements)
+            searchInput.visibility = View.GONE
+            manualSearchBtn.visibility = View.VISIBLE
+            positionSearchBtn.visibility = View.GONE
+        }
 
         // Recherche manuelle
         manualSearchBtn.setOnClickListener {
@@ -81,6 +105,15 @@ class EtablissementSelectActivity : AppCompatActivity() {
 
         // Retour aux établissements proches
         positionSearchBtn.setOnClickListener {
+            if (!Utils.hasLocationPermission(this)) {
+                Toast.makeText(
+                    this,
+                    "La localisation n'est pas autorisée",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
             searchInput.visibility = View.GONE
             manualSearchBtn.visibility = View.VISIBLE
             positionSearchBtn.visibility = View.GONE

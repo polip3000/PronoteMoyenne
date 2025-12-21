@@ -1,6 +1,7 @@
 package fr.algorythmice.pronotemoyenne
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -11,7 +12,9 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import com.chaquo.python.Python
+import com.google.android.gms.location.Priority
 import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksCacheStorage
 import fr.algorythmice.pronotemoyenne.infos.InfosCacheStorage
@@ -66,37 +69,56 @@ object Utils {
     /* ------------------ LOCALISATION ------------------ */
 
     fun hasLocationPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
+        val fine = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+
+        val coarse = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        return fine || coarse
     }
 
+
+    @SuppressLint("MissingPermission")
     fun getLastLocation(
         context: Context,
         onSuccess: (lat: Double, lon: Double) -> Unit,
         onError: (String) -> Unit
     ) {
-        val fusedLocationClient =
-            LocationServices.getFusedLocationProviderClient(context)
-
         if (!hasLocationPermission(context)) {
             onError("Permission localisation non accordée")
             return
         }
 
-        fusedLocationClient.lastLocation
+        val client = LocationServices.getFusedLocationProviderClient(context)
+
+        client.lastLocation
             .addOnSuccessListener { location ->
                 if (location != null) {
                     onSuccess(location.latitude, location.longitude)
                 } else {
-                    onError("Localisation indisponible")
+                    // Fallback fiable
+                    client.getCurrentLocation(
+                        Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+                        null
+                    ).addOnSuccessListener { loc ->
+                        if (loc != null) {
+                            onSuccess(loc.latitude, loc.longitude)
+                        } else {
+                            onError("Localisation indisponible")
+                        }
+                    }
                 }
             }
             .addOnFailureListener {
                 onError(it.message ?: "Erreur localisation")
             }
     }
+
 
     /* ------------------ DETECTION IDENTIFIANTS ------------------ */
 
