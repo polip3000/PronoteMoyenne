@@ -12,7 +12,6 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
 import com.chaquo.python.Python
 import com.google.android.gms.location.Priority
 import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
