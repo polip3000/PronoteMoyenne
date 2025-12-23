@@ -17,7 +17,10 @@ import com.google.android.gms.location.Priority
 import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksCacheStorage
 import fr.algorythmice.pronotemoyenne.infos.InfosCacheStorage
+import fr.algorythmice.pronotemoyenne.turboself.LoginTurboSelfStorage
+import fr.algorythmice.pronotemoyenne.turboself.TurboSelfCacheStorage
 import kotlinx.parcelize.Parcelize
+import java.nio.file.FileSystem
 import kotlin.math.*
 
 object Utils {
@@ -133,7 +136,15 @@ object Utils {
                 && !urlPronote.isNullOrBlank()
     }
 
-    /* ------------------ CALL PRONOTEPY ------------------ */
+    fun isLoginCompleteTurboSelf(
+        user: String?,
+        pass: String?,
+    ): Boolean {
+        return !user.isNullOrBlank()
+                && !pass.isNullOrBlank()
+    }
+
+    /* ------------------ CALL API ------------------ */
 
     data class NotesResult(
         val notes: Map<String, List<Pair<Double, Double>>>,
@@ -185,9 +196,48 @@ object Utils {
                 homework = parsedHomeworks
             )
 
-        } catch (_: Exception) {
-            NotesResult(emptyMap(), error = "Erreur réseau ou Pronote")
+        } catch (e: Exception) {
+            NotesResult(emptyMap(), error = e.toString())
         }
+    }
+
+    data class FetchQRcodeResult(
+        val qrcode: String = "",
+        val error: String? = null
+    )
+
+
+    fun fetchQRcode(context: Context):FetchQRcodeResult {
+        val user = LoginTurboSelfStorage.getUser(context)
+        val pass = LoginTurboSelfStorage.getPass(context)
+
+        if (!isLoginCompleteTurboSelf(user, pass)) {
+            return FetchQRcodeResult(error = "Identifiants incomplets")
+        }
+
+        return try {
+            val py = Python.getInstance()
+            val module = py.getModule("turboself_fetch")
+
+
+
+
+            val result = module.callAttr(
+                "get_qr_code",
+                user,
+                pass,
+                context.filesDir.absolutePath
+            )
+
+            TurboSelfCacheStorage.save(context, result.toString())
+
+            FetchQRcodeResult(qrcode = result.toString())
+
+
+        } catch (e: Exception) {
+            FetchQRcodeResult(error = e.toString())
+        }
+
     }
 
     /* ------------------ PARSE DATA ------------------ */

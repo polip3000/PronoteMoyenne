@@ -9,6 +9,7 @@ import com.google.android.material.navigation.NavigationView
 import fr.algorythmice.pronotemoyenne.grades.NotesFragment
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksFragment
 import fr.algorythmice.pronotemoyenne.infos.InfosFragment
+import fr.algorythmice.pronotemoyenne.turboself.TurboSelfFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -36,6 +37,10 @@ class HomeActivity : AppCompatActivity() {
 
                 R.id.nav_profil -> {
                     openFragment(InfosFragment())
+                }
+
+                R.id.nav_turboself -> {
+                    openFragment(TurboSelfFragment())
                 }
 
             }
