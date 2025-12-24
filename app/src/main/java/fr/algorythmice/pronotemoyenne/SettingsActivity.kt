@@ -90,9 +90,6 @@ class SettingsActivity : AppCompatActivity() {
                 intent.putParcelableArrayListExtra("etablissements", arrayListOf())
                 intent.putExtra("forceManual", true)
                 startActivity(intent)
-                // Désactiver le bouton pour feedback visuel
-                bind.selectEtablissementBtn.isEnabled = false
-                bind.selectEtablissementBtn.alpha = 0.4f
                 android.widget.Toast.makeText(this, "La localisation n'est pas autorisée", android.widget.Toast.LENGTH_SHORT).show()
             }
         }

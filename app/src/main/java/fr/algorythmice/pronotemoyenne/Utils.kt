@@ -53,11 +53,14 @@ object Utils {
         latitude: Double,
         longitude: Double,
         rayonKm: Double = 5.0
-    ): List<Etablissement> {
-        return etablissements.filter {
-            distanceKm(latitude, longitude, it.latitude, it.longitude) <= rayonKm
+    ): List<Etablissement> =
+        etablissements.filter {
+            it.latitude?.let { lat ->
+                it.longitude?.let { lon ->
+                    distanceKm(latitude, longitude, lat, lon) <= rayonKm
+                }
+            } ?: false
         }
-    }
 
     fun parseEtablissements(json: String): List<Etablissement> {
         val type = object : TypeToken<List<Etablissement>>() {}.type
@@ -350,10 +353,10 @@ data class Etablissement(
     val appellationOfficielle: String,
 
     @SerializedName("latitude")
-    val latitude: Double,
+    val latitude: Double? = null,
 
     @SerializedName("longitude")
-    val longitude: Double,
+    val longitude: Double? = null,
 
     @SerializedName("url_pronote")
     val urlPronote: String
