@@ -1,20 +1,23 @@
 import datetime
 from collections import defaultdict
-from pronotepy import Client
+from pronotepy import ParentClient
 from pronotepy.ent import *
 
 def get_notes(url, username, password, ent):
 
     # ------------ CONNECT CLIENT ------------
     if ent == "no_ent":
-        client = Client(url, username=username, password=password)
+        client = ParentClient(url, username=username, password=password)
     else:
         try:
             ent_class = globals()[ent]
         except KeyError:
             raise ValueError(f"ENT '{ent}' inconnu")
 
-        client = Client(url, username=username, password=password, ent=ent_class)
+        client = ParentClient(url,
+                              username=username,
+                              password=password,
+                              ent=ent_class)
     period = client.current_period
 
     # ---------------- GRADES ----------------
