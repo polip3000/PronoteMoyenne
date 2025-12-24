@@ -91,9 +91,23 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
         updateTimerJob = viewLifecycleOwner.lifecycleScope.launch {
             while (true) {
-                val diffMin = (System.currentTimeMillis() - lastUpdateMillis) / 60000
-                bind.titleText.text =
-                    "Mes Devoirs\nMis à jour il y a $diffMin min"
+                val diffMs = System.currentTimeMillis() - lastUpdateMillis
+                val diffMin = diffMs / 60000
+                val diffHour = diffMin / 60
+                val diffDay = diffHour / 24
+                val diffMonth = diffDay / 30
+                val diffYear = diffDay / 365
+
+                val text = when {
+                    diffMin < 1 -> "Mis à jour à l’instant"
+                    diffMin < 60 -> "Mis à jour il y a $diffMin min"
+                    diffHour < 24 -> "Mis à jour il y a $diffHour h"
+                    diffDay < 30 -> "Mis à jour il y a $diffDay jour${if (diffDay > 1) "s" else ""}"
+                    diffMonth < 12 -> "Mis à jour il y a $diffMonth mois"
+                    else -> "Mis à jour il y a $diffYear an${if (diffYear > 1) "s" else ""}"
+                }
+
+                bind.titleText.text = "Mes Devoirs\n$text"
                 delay(60000)
             }
         }

@@ -35,7 +35,7 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
         super.onViewCreated(view, savedInstanceState)
         _bind = FragmentTurboSelfBinding.bind(view)
 
-        setupListeners() // ← nouvelle fonction pour attacher tous les boutons
+        setupListeners()
 
         if (!Utils.isLoginCompleteTurboSelf(
                 LoginTurboSelfStorage.getUser(requireContext()),
