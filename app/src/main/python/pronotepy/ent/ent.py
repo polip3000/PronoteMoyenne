@@ -1,6 +1,6 @@
 from functools import partial
 
-from .complex_ent import ile_de_france
+from .complex_ent import monlycee
 # we need to ignore this because we are
 # ignoring the entire generic_func.py module
 from .generic_func import (  # type: ignore
@@ -197,6 +197,6 @@ extranet_colleges_somme = partial(
 
 """Ent ile de france"""
 
-monlycee = partial(ile_de_france)
+monlycee = partial(monlycee)
 
 

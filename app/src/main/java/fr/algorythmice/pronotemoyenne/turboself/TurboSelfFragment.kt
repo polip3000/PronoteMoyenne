@@ -28,14 +28,14 @@ import kotlinx.coroutines.withContext
 class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
     private var _bind: FragmentTurboSelfBinding? = null
     private val bind get() = _bind!!
-
     private var needRefreshAfterLogin = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _bind = FragmentTurboSelfBinding.bind(view)
+
+        setupListeners()
 
         if (!Utils.isLoginCompleteTurboSelf(
                 LoginTurboSelfStorage.getUser(requireContext()),
@@ -46,22 +46,11 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
             return
         }
 
-        bind.menuBtn.setOnClickListener {
-            (requireActivity() as HomeActivity)
-                .findViewById<DrawerLayout>(R.id.drawerLayout)
-                .openDrawer(GravityCompat.START)
-        }
-
-        bind.settingsBtn.setOnClickListener {
-            goToTurboselfLogin()
-        }
-
         if (!Python.isStarted()) {
             Python.start(AndroidPlatform(requireContext()))
         }
 
         displayQRcode()
-
     }
 
     override fun onDestroyView() {
@@ -75,14 +64,29 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
         (requireActivity() as HomeActivity).turboSelfLauncher.launch(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupListeners() {
+        bind.menuBtn.setOnClickListener {
+            (requireActivity() as HomeActivity)
+                .findViewById<DrawerLayout>(R.id.drawerLayout)
+                .openDrawer(GravityCompat.START)
+        }
+
+        bind.settingsBtn.setOnClickListener {
+            goToTurboselfLogin()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun refreshUIAfterLogin() {
         if (_bind != null) {
+            setupListeners()
             displayQRcode()
         } else {
-            // On attend que la vue soit créée
             needRefreshAfterLogin = true
         }
     }
+
 
     private fun displayQRcode() {
         bind.loading.visibility = View.VISIBLE

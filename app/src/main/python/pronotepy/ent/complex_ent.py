@@ -81,7 +81,7 @@ def ac_rennes(username: str, password: str) -> requests.cookies.RequestsCookieJa
         return session.cookies
 
 @typing.no_type_check
-def ile_de_france(username,
+def monlycee(username,
                    password,
                    pronote_url: str = "") -> requests.cookies.RequestsCookieJar:
 
@@ -103,22 +103,22 @@ def ile_de_france(username,
         returns the ent session cookies
     """
 
-
     s = requests.Session()
     s.headers.update(HEADERS)
 
     r = s.get(pronote_url, allow_redirects=True)
-
     m = re.search(r'<form[^>]+action="([^"]+)"', r.text)
-
     if not m:
         raise Exception("Formulaire de login introuvable → pas sur la page Keycloak ?")
     form_action = urljoin(r.url, m.group(1))
 
     hidden_inputs = dict(re.findall(r'name="([^"]+)" value="([^"]*)"', r.text))
-
     payload = {**hidden_inputs, "username": username, "password": password, "credentialId": ""}
 
-    s.post(form_action, data=payload, allow_redirects=True)
+    post_response = s.post(form_action, data=payload, allow_redirects=True)
+
+    if re.search(r'<form[^>]+action="[^"]+"', post_response.text):
+        raise Exception("Identifiants incorrects")
+
 
     return s.cookies

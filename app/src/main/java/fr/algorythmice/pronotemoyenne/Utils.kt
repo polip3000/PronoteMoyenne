@@ -332,8 +332,8 @@ object Utils {
 
             val date = java.time.LocalDate.parse(dateStr, inputFormatter)
             date.format(outputFormatter)
-        } catch (e: Exception) {
-            dateStr // fallback si jamais la date est invalide
+        } catch (_: Exception) {
+            dateStr
         }
     }
 
