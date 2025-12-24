@@ -10,7 +10,6 @@
     android:background="@drawable/bg_gradient_futuristic"
     tools:context=".turboself.TurboSelfQRcode">
 
-    <!-- Bouton menu à gauche -->
     <ImageButton
         android:id="@+id/menuBtn"
         android:layout_width="42dp"
@@ -23,7 +22,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Bouton settings à droite -->
     <ImageButton
         android:id="@+id/settingsBtn"
         android:layout_width="42dp"
@@ -36,12 +34,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Titre centré horizontalement (entre les deux boutons) -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Mon QR Code"
+        android:text="@string/my_qr_code"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -51,7 +48,6 @@
         app:layout_constraintStart_toEndOf="@id/menuBtn"
         app:layout_constraintEnd_toStartOf="@id/settingsBtn"/>
 
-    <!-- Carte Glass -->
     <LinearLayout
         android:id="@+id/qrCard"
         android:layout_width="0dp"
@@ -65,15 +61,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- QR Code centré -->
         <ImageView
             android:id="@+id/qrImageView"
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_gravity="center"
-            android:contentDescription="QR Code"/>
+            android:contentDescription="@string/qr_code"/>
 
-        <!-- Texte info -->
         <TextView
             android:id="@+id/noteText"
             android:layout_width="match_parent"
@@ -84,7 +78,6 @@
             android:layout_marginTop="16dp"
             android:visibility="gone"/>
 
-        <!-- Loader -->
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"

@@ -6,7 +6,6 @@
     android:padding="20dp"
     android:background="@drawable/bg_gradient_futuristic">
 
-    <!-- Bouton menu à gauche -->
     <ImageButton
         android:id="@+id/menuBtn"
         android:layout_width="42dp"
@@ -19,13 +18,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Titre centré horizontalement -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:text="Infos personnelles"
+        android:text="@string/personal_infos"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -34,7 +32,6 @@
         app:layout_constraintStart_toEndOf="@id/menuBtn"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Carte Glass -->
     <LinearLayout
         android:id="@+id/infoCard"
         android:layout_width="0dp"
@@ -48,11 +45,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Élève -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Élève"
+            android:text="@string/student"
             android:textColor="#A0B4FF"
             android:textSize="14sp"/>
 
@@ -60,17 +56,16 @@
             android:id="@+id/studentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="—"
+            android:text="@string/waiting_for_infos"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Classe -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Classe"
+            android:text="@string/student_s_class"
             android:textColor="#A0B4FF"
             android:textSize="14sp"/>
 
@@ -78,17 +73,16 @@
             android:id="@+id/className"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="—"
+            android:text="@string/waiting_for_infos"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Établissement -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Établissement"
+            android:text="@string/establishment"
             android:textColor="#A0B4FF"
             android:textSize="14sp"/>
 
@@ -96,19 +90,18 @@
             android:id="@+id/establishment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="—"
+            android:text="@string/waiting_for_infos"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
     </LinearLayout>
 
-    <!-- Message vide -->
     <TextView
         android:id="@+id/emptyText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Aucune information disponible"
+        android:text="@string/no_information_available"
         android:textColor="#FF5252"
         android:textSize="18sp"
         android:textStyle="bold"

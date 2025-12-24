@@ -21,14 +21,13 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:text="Paramètres"
+            android:text="@string/settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_gravity="center"
-            tools:ignore="HardcodedText" />
+            android:layout_gravity="center"/>
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -42,9 +41,8 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Identifiant"
-                android:textColor="#FFFFFF"
-                tools:ignore="HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
+                android:hint="@string/username"
+                android:textColor="#FFFFFF"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,10 +57,9 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mot de passe"
+                android:hint="@string/password"
                 android:inputType="textPassword"
-                android:textColor="#FFFFFF"
-                tools:ignore="HardcodedText,TextContrastCheck,VisualLintTextFieldSize" />
+                android:textColor="#FFFFFF"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -81,11 +78,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
                 android:completionThreshold="1"
-                android:hint="Sélectionner l'ENT"
+                android:hint="@string/select_ent"
                 android:imeOptions="actionDone"
                 android:inputType="text"
-                android:textColor="#FFFFFF"
-                tools:ignore="HardcodedText,TextContrastCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
+                android:textColor="#FFFFFF"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,11 +91,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/btn_neon"
-            android:text="@string/trouver_mon_tablissement"
+            android:text="@string/find_my_establishment"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            app:backgroundTint="@null"
-            tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+            app:backgroundTint="@null"/>
 
         <Button
             android:id="@+id/saveBtn"
@@ -107,10 +102,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:background="@drawable/btn_neon"
-            android:text="Enregistrer"
+            android:text="@string/save"
             android:textColor="#FFFFFF"
-            app:backgroundTint="@null"
-            tools:ignore="HardcodedText,TextContrastCheck,VisualLintButtonSize" />
+            app:backgroundTint="@null"/>
 
     </LinearLayout>
 

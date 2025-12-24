@@ -14,13 +14,12 @@ import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import com.chaquo.python.Python
 import com.google.android.gms.location.Priority
-import fr.algorythmice.pronotemoyenne.grades.NotesCacheStorage
+import fr.algorythmice.pronotemoyenne.grades.GradesCacheStorage
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksCacheStorage
 import fr.algorythmice.pronotemoyenne.infos.InfosCacheStorage
 import fr.algorythmice.pronotemoyenne.turboself.LoginTurboSelfStorage
 import fr.algorythmice.pronotemoyenne.turboself.TurboSelfCacheStorage
 import kotlinx.parcelize.Parcelize
-import java.nio.file.FileSystem
 import kotlin.math.*
 
 object Utils {
@@ -190,7 +189,7 @@ object Utils {
             val parsedNotes = parseAndComputeNotes(rawGrades)
             val parsedHomeworks = parseHomeworks(rawHomeworks)
 
-            NotesCacheStorage.saveNotes(context, parsedNotes)
+            GradesCacheStorage.saveNotes(context, parsedNotes)
             HomeworksCacheStorage.saveHomeworks(context, rawHomeworks)
             InfosCacheStorage.save(context, className, establishment, studentName)
 

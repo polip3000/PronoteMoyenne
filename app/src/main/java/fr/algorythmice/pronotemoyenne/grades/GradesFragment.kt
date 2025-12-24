@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class NotesFragment : Fragment(R.layout.fragment_notes) {
+class GradesFragment : Fragment(R.layout.fragment_notes) {
 
     private var _bind: FragmentNotesBinding? = null
     private val bind get() = _bind!!
@@ -105,10 +105,10 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         bind.noteText.visibility = View.GONE
         bind.notesContainer.removeAllViews()
 
-        val cached = NotesCacheStorage.loadNotes(requireContext())
+        val cached = GradesCacheStorage.loadNotes(requireContext())
         if (!cached.isNullOrEmpty()) {
             displayNotesFuturistic(cached)
-            val lastUpdate = NotesCacheStorage.getLastUpdate(requireContext())
+            val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
             startUpdateTimer(lastUpdate)
             bind.loading.visibility = View.VISIBLE
         }
@@ -128,7 +128,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
                 }
             } else {
                 displayNotesFuturistic(result.notes)
-                NotesCacheStorage.saveNotes(requireContext(), result.notes)
+                GradesCacheStorage.saveNotes(requireContext(), result.notes)
                 startUpdateTimer(System.currentTimeMillis())
             }
         }

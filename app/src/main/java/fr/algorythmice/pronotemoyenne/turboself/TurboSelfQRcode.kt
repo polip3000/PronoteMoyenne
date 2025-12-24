@@ -42,7 +42,7 @@ class TurboSelfQRcode : AppCompatActivity() {
                 LoginTurboSelfStorage.save(this, user, pass)
                 goToQRcode()
             } else {
-                bind.errorText.text = getString(R.string.veuillez_remplir_les_champs)
+                bind.errorText.text = getString(R.string.please_fill_in_the_fields)
             }
         }
 

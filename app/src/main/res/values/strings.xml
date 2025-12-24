@@ -1,17 +1,30 @@
 <resources>
     <string name="app_name">PronoteMoyenne</string>
-    <string name="trouver_mon_tablissement">Trouver mon établissement</string>
-    <string name="s_lectionner_l_ent">Sélectionner l\'ENT</string>
-    <string name="mot_de_passe">Mot de passe</string>
-    <string name="identifiant">Identifiant</string>
-    <string name="connexion">Connexion</string>
-    <string name="se_connecter">Se connecter</string>
-    <string name="tablissements_proches">Établissements proches</string>
-    <string name="nom_de_l_tablissement">Nom de l\'établissement</string>
-    <string name="rechercher_manuellement">Rechercher manuellement</string>
-    <string name="rechercher_avec_la_position">rechercher avec la position</string>
-    <string name="recherche_tablissement">Recherche Établissement</string>
-    <string name="veuillez_remplir_les_champs">Veuillez remplir les champs</string>
-    <string name="connexion_nturboself">Connexion\nTurboself</string>
+    <string name="find_my_establishment">Trouver mon établissement</string>
+    <string name="select_ent">Sélectionner l\'ENT</string>
+    <string name="password">Mot de passe</string>
+    <string name="username">Identifiant</string>
+    <string name="connection">Connexion</string>
+    <string name="log_in">Se connecter</string>
+    <string name="nearby_establishments">Établissements proches</string>
+    <string name="name_of_the_establishment">Nom de l\'établissement</string>
+    <string name="search_manually">Rechercher manuellement</string>
+    <string name="search_by_location">Rechercher avec la position</string>
+    <string name="please_fill_in_the_fields">Veuillez remplir les champs</string>
+    <string name="connection_to_turboself">Connexion\nTurboself</string>
     <string name="return_btn">Retour</string>
+    <string name="settings">Paramètres</string>
+    <string name="save">Enregistrer</string>
+    <string name="my_homeworks">Mes devoirs</string>
+    <string name="personal_infos">Informations personnelles</string>
+    <string name="student">Élève</string>
+    <string name="waiting_for_infos">—</string>
+    <string name="student_s_class">Classe</string>
+    <string name="establishment">Établissement</string>
+    <string name="no_information_available">Aucune information disponible</string>
+    <string name="my_grades">Mes Notes</string>
+    <string name="my_qr_code">Mon QR Code</string>
+    <string name="qr_code">QR Code</string>
+
+
 </resources>

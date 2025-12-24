@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
-import fr.algorythmice.pronotemoyenne.grades.NotesFragment
+import fr.algorythmice.pronotemoyenne.grades.GradesFragment
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksFragment
 import fr.algorythmice.pronotemoyenne.infos.InfosFragment
 import fr.algorythmice.pronotemoyenne.turboself.TurboSelfFragment
@@ -23,14 +23,14 @@ class HomeActivity : AppCompatActivity() {
         val navView = findViewById<NavigationView>(R.id.navigationView)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, NotesFragment(), "notesFragment")
+            .replace(R.id.fragmentContainer, GradesFragment(), "notesFragment")
             .commit()
 
 
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_notes -> {
-                    openFragment(NotesFragment(), "notesFragment")
+                    openFragment(GradesFragment(), "notesFragment")
                 }
 
                 R.id.nav_homework -> {
@@ -55,7 +55,7 @@ class HomeActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            val fragment = supportFragmentManager.findFragmentByTag("notesFragment") as? NotesFragment
+            val fragment = supportFragmentManager.findFragmentByTag("notesFragment") as? GradesFragment
             fragment?.reloadNotes()
         }
     }

@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Bouton menu à gauche -->
     <ImageButton
         android:id="@+id/menuBtn"
         android:layout_width="42dp"
@@ -19,13 +18,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Titre centré horizontalement -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Mes Devoirs"
+        android:text="@string/my_homeworks"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"

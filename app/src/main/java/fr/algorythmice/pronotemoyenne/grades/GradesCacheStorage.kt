@@ -5,7 +5,7 @@ import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-object NotesCacheStorage {
+object GradesCacheStorage {
 
     private const val PREF_NAME = "notes_cache_prefs"
     private const val KEY_NOTES = "cached_notes"
