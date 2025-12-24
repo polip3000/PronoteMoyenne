@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -32,6 +34,7 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
 
     private var updateTimerJob: Job? = null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -90,11 +93,13 @@ class NotesFragment : Fragment(R.layout.fragment_notes) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun reloadNotes() {
         updateTimerJob?.cancel()
         loadNotes()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun loadNotes() {
         bind.loading.visibility = View.VISIBLE
         bind.noteText.visibility = View.GONE
