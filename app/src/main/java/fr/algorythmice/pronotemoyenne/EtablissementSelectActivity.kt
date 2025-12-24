@@ -41,7 +41,7 @@ class EtablissementSelectActivity : AppCompatActivity() {
         val forceManual = intent.getBooleanExtra("forceManual", false)
         val hasLocationPermission = Utils.hasLocationPermission(this)
 
-        val json = Utils.loadJsonFromAssets(this, "etablissements.json")
+        val json = Utils.loadJsonFromAssets(this, "etablissements_parent.json")
         allEtablissements = Utils.parseEtablissements(json)
 
         // Configuration du champ de recherche
