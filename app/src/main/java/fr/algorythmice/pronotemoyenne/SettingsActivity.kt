@@ -65,7 +65,7 @@ class SettingsActivity : AppCompatActivity() {
         /* ---------- Sélection établissement ---------- */
 
         val json = Utils.loadJsonFromAssets(this, "etablissements_parent.json")
-        val etablissements = Utils.parseEtablissements(json)
+        val etablissements = Utils.parseEstablishments(json)
 
         val hasLocationPermission = Utils.hasLocationPermission(this)
 
@@ -74,7 +74,7 @@ class SettingsActivity : AppCompatActivity() {
                 Utils.getLastLocation(
                     this,
                     onSuccess = { lat, lon ->
-                        val proches = Utils.etablissementsDansUnRayon(etablissements, lat, lon)
+                        val proches = Utils.getEstablishmentsWithinRadius(etablissements, lat, lon)
 
                         if (proches.isNotEmpty()) {
                             val intent = Intent(this, EtablissementSelectActivity::class.java)
