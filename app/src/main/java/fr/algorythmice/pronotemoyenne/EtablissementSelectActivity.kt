@@ -117,7 +117,7 @@ class EtablissementSelectActivity : AppCompatActivity() {
             searchInput.visibility = View.GONE
             manualSearchBtn.visibility = View.VISIBLE
             positionSearchBtn.visibility = View.GONE
-            titleetablissement.text = getString(R.string.tablissements_proches)
+            titleetablissement.text = getString(R.string.nearby_establishments)
             showList(etablissements)
         }
 

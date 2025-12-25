@@ -25,6 +25,7 @@
     <string name="my_grades">Mes Notes</string>
     <string name="my_qr_code">Mon QR Code</string>
     <string name="qr_code">QR Code</string>
+    <string name="recherche_tablissement">Recherche Etablissements</string>
 
 
 </resources>

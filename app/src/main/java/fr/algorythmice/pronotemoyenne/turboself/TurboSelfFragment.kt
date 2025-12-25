@@ -30,6 +30,9 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
     private val bind get() = _bind!!
     private var needRefreshAfterLogin = false
 
+    private var user: String? = null
+    private var pass: String? = null
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,11 +40,11 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
 
         setupListeners()
 
-        if (!Utils.isLoginCompleteTurboSelf(
-                LoginTurboSelfStorage.getUser(requireContext()),
-                LoginTurboSelfStorage.getPass(requireContext())
-            )
-        ) {
+        pass = LoginTurboSelfStorage.getPass(requireContext())
+        user = LoginTurboSelfStorage.getUser(requireContext())
+
+        if (!Utils.isLoginCompleteTurboSelf(user, pass))
+        {
             goToTurboselfLogin()
             return
         }
@@ -98,22 +101,30 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
             bind.qrImageView.setImageBitmap(qrCode)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                Utils.fetchQRcode(requireContext())
-            }
+        if (user == "demonstration" && pass == "turboself"){
+            val qrnumber = "23497865"
+            val qrCode = generateQrCode(qrnumber)
+            bind.qrImageView.setImageBitmap(qrCode)
+        }
+        else{
 
-            bind.loading.visibility = View.GONE
-
-            if (result.error != null) {
-                bind.noteText.apply {
-                    visibility = View.VISIBLE
-                    text = result.error
-                    setTextColor(Color.RED)
+            viewLifecycleOwner.lifecycleScope.launch {
+                val result = withContext(Dispatchers.IO) {
+                    Utils.fetchQRcode(requireContext())
                 }
-            } else {
-                val qrCode = generateQrCode(result.qrcode)
-                bind.qrImageView.setImageBitmap(qrCode)
+
+                bind.loading.visibility = View.GONE
+
+                if (result.error != null) {
+                    bind.noteText.apply {
+                        visibility = View.VISIBLE
+                        text = result.error
+                        setTextColor(Color.RED)
+                    }
+                } else {
+                    val qrCode = generateQrCode(result.qrcode)
+                    bind.qrImageView.setImageBitmap(qrCode)
+                }
             }
         }
     }
