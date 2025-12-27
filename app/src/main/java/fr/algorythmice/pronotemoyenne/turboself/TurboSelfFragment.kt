@@ -116,14 +116,12 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
         val user = credentials.user
         val pass = credentials.pass
 
-        if (user == "demonstration" && pass == "turboself"){
+        if (user == "demonstration" && pass == "turboself") {
             bind.loading.visibility = View.GONE
             val qrnumber = "23497865"
             val qrCode = generateQrCode(qrnumber)
             bind.qrImageView.setImageBitmap(qrCode)
-        }
-        else{
-
+        } else {
             viewLifecycleOwner.lifecycleScope.launch {
                 val result = withContext(Dispatchers.IO) {
                     TurboselfUtils.fetchQRCode(requireContext())
@@ -144,6 +142,7 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
             }
         }
     }
+
 
 
     private fun generateQrCode(content: String): Bitmap {

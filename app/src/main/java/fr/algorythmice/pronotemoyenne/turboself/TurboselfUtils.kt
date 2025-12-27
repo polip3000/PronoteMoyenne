@@ -1,19 +1,19 @@
 package fr.algorythmice.pronotemoyenne.turboself
 
 import android.content.Context
-import com.chaquo.python.Python
+import android.util.Log
 import fr.algorythmice.pronotemoyenne.Utils.isTurboSelfLoginComplete
+import kotlinx.coroutines.runBlocking
+import fr.algorythmice.turboselfapi.TurbApi
 
 object TurboselfUtils {
 
-    /* ------------------ CALL API ------------------ */
     data class FetchQRcodeResult(
         val qrcode: String = "",
         val error: String? = null
     )
 
-
-    fun fetchQRCode(context: Context):FetchQRcodeResult {
+    fun fetchQRCode(context: Context): FetchQRcodeResult {
         val user = LoginTurboSelfStorage.getUser(context)
         val pass = LoginTurboSelfStorage.getPass(context)
 
@@ -22,23 +22,21 @@ object TurboselfUtils {
         }
 
         return try {
-            val py = Python.getInstance()
-            val module = py.getModule("turboself_fetch")
+            val qrCode = runBlocking {
+                val api = TurbApi(user, pass)
+                api.initLogin()
+                val qr = api.getQrPayload()
+                api.close()
+                qr
+            }
 
-            val result = module.callAttr(
-                "get_qr_code",
-                user,
-                pass,
-                context.filesDir.absolutePath
-            )
+            TurboSelfCacheStorage.save(context, qrCode)
 
-            TurboSelfCacheStorage.save(context, result.toString())
-
-            FetchQRcodeResult(qrcode = result.toString())
-
+            FetchQRcodeResult(qrcode = qrCode)
 
         } catch (e: Exception) {
-            FetchQRcodeResult(error = e.toString())
-        }
+            FetchQRcodeResult(error = e.message ?: e.toString())
+            Log.e("TurboselfUtils", "Erreur lors de la récupération du QR code", e)
+        } as FetchQRcodeResult
     }
 }
