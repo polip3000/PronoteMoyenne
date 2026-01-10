@@ -5,7 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:padding="24dp"
-android:background="@drawable/bg_gradient_futuristic">
+android:background="@drawable/bg_gradient_futuristic_without_border">
 
 <LinearLayout
     android:id="@+id/card"
@@ -36,9 +36,9 @@ android:background="@drawable/bg_gradient_futuristic">
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:boxStrokeColor="#3A7CFF"
+        app:boxStrokeColor="@android:color/white"
         app:boxStrokeWidth="2dp"
-        app:hintTextColor="#A05BFF">
+        app:hintTextColor="@android:color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
@@ -46,6 +46,7 @@ android:background="@drawable/bg_gradient_futuristic">
             android:layout_height="wrap_content"
             android:hint="@string/username"
             android:textColor="#FFFFFF"
+            android:textColorHint="@color/hint_text_color"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,9 +56,9 @@ android:background="@drawable/bg_gradient_futuristic">
         android:layout_marginTop="18dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:passwordToggleEnabled="true"
-        app:boxStrokeColor="#3A7CFF"
+        app:boxStrokeColor="@android:color/white"
         app:boxStrokeWidth="2dp"
-        app:hintTextColor="#A05BFF">
+        app:hintTextColor="@android:color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
@@ -66,6 +67,7 @@ android:background="@drawable/bg_gradient_futuristic">
             android:hint="@string/password"
             android:inputType="textPassword"
             android:textColor="#FFFFFF"
+            android:textColorHint="@color/hint_text_color"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,5 +106,3 @@ android:background="@drawable/bg_gradient_futuristic">
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

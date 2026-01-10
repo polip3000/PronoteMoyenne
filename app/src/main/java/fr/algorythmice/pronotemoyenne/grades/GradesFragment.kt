@@ -103,10 +103,9 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
 
         val cached = GradesCacheStorage.loadNotes(requireContext())
         if (!cached.isNullOrEmpty()) {
-            displayNotesFuturistic(cached)
+            displayNotes(cached)
             val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
             startUpdateTimer(lastUpdate)
-            bind.loading.visibility = View.VISIBLE
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -123,15 +122,14 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
                     setTextColor(Color.RED)
                 }
             } else {
-                displayNotesFuturistic(result.notes)
-                GradesCacheStorage.saveNotes(requireContext(), result.notes)
+                displayNotes(result.notes)
                 startUpdateTimer(System.currentTimeMillis())
             }
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n", "UseKtx")
-    private fun displayNotesFuturistic(parsed: Map<String, List<Pair<Double, Double>>>) {
+    private fun displayNotes(parsed: Map<String, List<Pair<Double, Double>>>) {
         bind.notesContainer.removeAllViews()
 
         val moyenneGenerale = Utils.computeGeneralAverage(parsed)

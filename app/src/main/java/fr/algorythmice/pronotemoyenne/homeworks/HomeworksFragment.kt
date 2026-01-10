@@ -35,6 +35,7 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         _bind = FragmentHomeworksBinding.bind(view)
 
         bind.menuBtn.setOnClickListener {
@@ -51,40 +52,6 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
         updateTimerJob?.cancel()
         _bind = null
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun loadHomeworks() {
-        bind.loading.visibility = View.VISIBLE
-        bind.noteText.visibility = View.GONE
-        bind.notesContainer.removeAllViews()
-
-        val cachedRaw = HomeworksCacheStorage.loadHomeworks(requireContext())
-        if (!cachedRaw.isNullOrEmpty()) {
-            val parsed = PronoteUtils.parseHomeworks(cachedRaw)
-            displayHomeworks(parsed)
-            startUpdateTimer(HomeworksCacheStorage.getLastUpdate(requireContext()))
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                PronoteUtils.syncPronoteData(requireContext())
-            }
-
-            bind.loading.visibility = View.GONE
-
-            if (result.error != null) {
-                bind.noteText.apply {
-                    visibility = View.VISIBLE
-                    text = result.error
-                    setTextColor(Color.RED)
-                }
-            } else {
-                displayHomeworks(result.homework)
-                startUpdateTimer(System.currentTimeMillis())
-            }
-        }
-    }
-
 
     @SuppressLint("SetTextI18n")
     private fun startUpdateTimer(lastUpdateMillis: Long) {
@@ -115,18 +82,51 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadHomeworks() {
+        bind.loading.visibility = View.VISIBLE
+        bind.noteText.visibility = View.GONE
+        bind.notesContainer.removeAllViews()
+
+        val cachedRaw = HomeworksCacheStorage.loadHomeworks(requireContext())
+        if (!cachedRaw.isNullOrEmpty()) {
+            val parsed = PronoteUtils.parseHomeworks(cachedRaw)
+            displayHomeworks(parsed)
+            val lastUpdate = HomeworksCacheStorage.getLastUpdate(requireContext())
+            startUpdateTimer(lastUpdate)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                PronoteUtils.syncPronoteData(requireContext())
+            }
+
+            bind.loading.visibility = View.GONE
+
+            if (result.error != null) {
+                bind.noteText.apply {
+                    visibility = View.VISIBLE
+                    text = result.error
+                    setTextColor(Color.RED)
+                }
+            } else {
+                displayHomeworks(result.homework)
+                startUpdateTimer(System.currentTimeMillis())
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     private fun displayHomeworks(
         parsed: Map<String, Map<String, List<String>>>
     ) {
         bind.notesContainer.removeAllViews()
 
-        // Trier les dates chronologiquement
         val sortedDates = parsed.keys
             .mapNotNull { dateStr ->
                 try { java.time.LocalDate.parse(dateStr) } catch (_: Exception) { null }
             }
-            .sorted() // du plus ancien au plus récent
+            .sorted()
             .map { it.toString() }
 
         sortedDates.forEach { date ->
