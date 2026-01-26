@@ -11,6 +11,7 @@ import fr.algorythmice.pronotekt.EntFunction
 import fr.algorythmice.pronotekt.ent.*
 import fr.algorythmice.pronotemoyenne.LoginStorage
 import fr.algorythmice.pronotemoyenne.Utils.isLoginComplete
+import fr.algorythmice.pronotemoyenne.grades.AveragesCacheStorageCacheStorage
 import fr.algorythmice.pronotemoyenne.grades.GradesCacheStorage
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksCacheStorage
 import fr.algorythmice.pronotemoyenne.infos.InfosCacheStorage
@@ -24,6 +25,7 @@ object PronoteUtils {
     data class NotesResult(
         val notes: Map<String, List<Pair<Double, Double>>>,
         val homework: Map<String, Map<String, List<String>>> = emptyMap(),
+        val average: Map<String, List<Pair<Double, Double>>> = emptyMap(),
         val error: String? = null
     )
     @RequiresApi(Build.VERSION_CODES.O)
@@ -36,7 +38,7 @@ object PronoteUtils {
         val pronoteUrl = LoginStorage.getUrlPronote(context)
 
         if (!isLoginComplete(user, pass, ent, pronoteUrl)) {
-            return NotesResult(emptyMap(), error = "Identifiants incomplets")
+            return NotesResult(notes = emptyMap(), homework = emptyMap(), average = emptyMap(), error = "Identifiants incomplets")
         }
 
         return try {
@@ -60,6 +62,15 @@ object PronoteUtils {
                 }
             }
 
+            val averageText = buildString {
+                period.averages.groupBy { it.subject.name }.forEach { (subject, average) ->
+                    append("\nMatière : $subject\n")
+                    average.forEach { g ->
+                        append("${g.student}/${g.out_of}")
+                    }
+                }
+            }
+
             val homeworkText = buildString {
                 client.homework(LocalDate.now()).forEach { hw ->
                     append("\nDate : ${hw.date}\n")
@@ -68,16 +79,18 @@ object PronoteUtils {
                 }
             }
 
-            val parsedNotes = parseAndComputeNotes(gradeText)
+            val parsedNotes = parseNotes(gradeText)
             val parsedHomeworks = parseHomeworks(homeworkText)
+            val parsedAverages = parseAverages(averageText)
 
             GradesCacheStorage.saveNotes(context, parsedNotes)
+            AveragesCacheStorageCacheStorage.saveAverages(context, parsedAverages)
             HomeworksCacheStorage.saveHomeworks(context, homeworkText)
             InfosCacheStorage.save(context, client.info.class_name, client.info.establishment, client.info.name)
 
-            NotesResult(notes = parsedNotes, homework = parsedHomeworks)
+            NotesResult(notes = parsedNotes, homework = parsedHomeworks, average = parsedAverages)
         } catch (e: Exception) {
-            NotesResult(emptyMap(), error = e.toString())
+            NotesResult(notes = emptyMap(), homework = emptyMap(), average = emptyMap(), error = e.toString())
         }
     }
 
@@ -114,7 +127,7 @@ object PronoteUtils {
     }
 
     /* ------------------ PARSE DATA ------------------ */
-    private fun parseAndComputeNotes(raw: String): Map<String, List<Pair<Double, Double>>> {
+    private fun parseNotes(raw: String): Map<String, List<Pair<Double, Double>>> {
         val result = mutableMapOf<String, MutableList<Pair<Double, Double>>>()
         val lines = raw.lines()
         var currentSubject = ""
@@ -130,7 +143,8 @@ object PronoteUtils {
                 }
                 currentSubject = trimmed.removePrefix("Matière :").trim()
 
-            } else if (trimmed.isNotEmpty() && !trimmed.contains("abs", true)) {
+            } else if (trimmed.isNotEmpty()
+                && !trimmed.contains("abs", true)) {
 
                 val match =
                     Regex("""([\d.,]+)/(\d+)\s*\(coef:\s*([\d.,]+)\)""")
@@ -152,6 +166,42 @@ object PronoteUtils {
 
         if (notes.isNotEmpty()) {
             result[currentSubject] = notes
+        }
+
+        return result
+    }
+
+    private fun parseAverages(raw: String): Map<String, List<Pair<Double, Double>>> {
+        val result = mutableMapOf<String, MutableList<Pair<Double, Double>>>()
+        val lines = raw.lines()
+        var currentSubject = ""
+        var averages = mutableListOf<Pair<Double, Double>>()
+
+        for (line in lines) {
+            val trimmed = line.trim()
+
+            if (trimmed.startsWith("Matière :")) {
+                if (averages.isNotEmpty()) {
+                    result[currentSubject] = averages
+                    averages = mutableListOf()
+                }
+                currentSubject = trimmed.removePrefix("Matière :").trim()
+            } else if (trimmed.isNotEmpty() && !trimmed.contains("abs", true)) {
+                val match = Regex("""([\d.,]+)/([\d]+)""").find(trimmed)
+
+                if (match != null) {
+                    val (avgStr, surStr) = match.destructured
+                    val avg = avgStr.replace(",", ".").toDouble()
+                    val sur = surStr.toDouble()
+
+                    val avg20 = if (sur != 20.0) avg * 20 / sur else avg
+                    averages.add(avg20 to 1.0)
+                }
+            }
+        }
+
+        if (averages.isNotEmpty()) {
+            result[currentSubject] = averages
         }
 
         return result
