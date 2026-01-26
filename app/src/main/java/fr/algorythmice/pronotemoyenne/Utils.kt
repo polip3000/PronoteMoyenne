@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi
 import com.google.android.gms.location.Priority
 import kotlinx.parcelize.Parcelize
 import kotlin.math.*
+import fr.algorythmice.pronotemoyenne.pronote.PronoteUtils.NoteEntry
 
 object Utils {
 
@@ -158,14 +159,6 @@ object Utils {
         } catch (_: Exception) {
             dateStr
         }
-    }
-
-    /* ------------------ COMPUTE GENERAL AVERAGE ------------------ */
-
-    fun computeGeneralAverage(parsed: Map<String, List<Pair<Double, Double>>>): Double {
-        return parsed.map { (_, notes) ->
-            notes.sumOf { it.first * it.second } / notes.sumOf { it.second }
-        }.average()
     }
 }
 

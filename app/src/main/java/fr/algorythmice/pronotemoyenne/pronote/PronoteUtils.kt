@@ -23,11 +23,14 @@ object PronoteUtils {
 
     /* ------------------ CALL API ------------------ */
     data class NotesResult(
-        val notes: Map<String, List<Pair<Double, Double>>>,
+        val notes: Map<String, List<NoteEntry>>,
         val homework: Map<String, Map<String, List<String>>> = emptyMap(),
         val average: Map<String, List<Pair<Double, Double>>> = emptyMap(),
         val error: String? = null
     )
+
+    data class NoteEntry(val note: Double, val outOf: Double, val coef: Double)
+
     @RequiresApi(Build.VERSION_CODES.O)
     @Suppress("unused")
     fun syncPronoteData(context: Context): NotesResult {
@@ -127,11 +130,11 @@ object PronoteUtils {
     }
 
     /* ------------------ PARSE DATA ------------------ */
-    private fun parseNotes(raw: String): Map<String, List<Pair<Double, Double>>> {
-        val result = mutableMapOf<String, MutableList<Pair<Double, Double>>>()
+    private fun parseNotes(raw: String): Map<String, List<NoteEntry>> {
+        val result = mutableMapOf<String, MutableList<NoteEntry>>()
         val lines = raw.lines()
         var currentSubject = ""
-        var notes = mutableListOf<Pair<Double, Double>>()
+        var notes = mutableListOf<NoteEntry>()
 
         for (line in lines) {
             val trimmed = line.trim()
@@ -147,19 +150,16 @@ object PronoteUtils {
                 && !trimmed.contains("abs", true)) {
 
                 val match =
-                    Regex("""([\d.,]+)/(\d+)\s*\(coef:\s*([\d.,]+)\)""")
+                    Regex("""([\d.,]+)/([\d]+)\s*\(coef:\s*([\d.,]+)\)""")
                         .find(trimmed)
 
                 if (match != null) {
-                    val (noteStr, surStr, coefStr) = match.destructured
+                    val (noteStr, outOfStr, coefStr) = match.destructured
                     val note = noteStr.replace(",", ".").toDouble()
-                    val sur = surStr.toDouble()
+                    val outOf = outOfStr.toDouble()
                     val coef = coefStr.replace(",", ".").toDouble()
 
-                    val note20 = if (sur != 20.0) note * 20 / sur else note
-                    val coefFinal = if (sur != 20.0) coef * sur / 20 else coef
-
-                    notes.add(note20 to coefFinal)
+                    notes.add(NoteEntry(note = note, outOf = outOf, coef = coef))
                 }
             }
         }

@@ -20,6 +20,7 @@ import fr.algorythmice.pronotemoyenne.SettingsActivity
 import fr.algorythmice.pronotemoyenne.Utils
 import fr.algorythmice.pronotemoyenne.databinding.FragmentNotesBinding
 import fr.algorythmice.pronotemoyenne.pronote.PronoteUtils
+import fr.algorythmice.pronotemoyenne.pronote.PronoteUtils.NoteEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -101,9 +102,11 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
         bind.noteText.visibility = View.GONE
         bind.notesContainer.removeAllViews()
 
-        val cached = GradesCacheStorage.loadNotes(requireContext())
-        if (!cached.isNullOrEmpty()) {
-            displayNotes(cached)
+        val cachedNotes = GradesCacheStorage.loadNotes(requireContext())
+        val cachedAverages = AveragesCacheStorageCacheStorage.loadAverages(requireContext())
+
+        if (!cachedNotes.isNullOrEmpty() && !cachedAverages.isNullOrEmpty()) {
+            displayNotes(cachedNotes, cachedAverages)
             val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
             startUpdateTimer(lastUpdate)
         }
@@ -122,17 +125,22 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
                     setTextColor(Color.RED)
                 }
             } else {
-                displayNotes(result.notes)
+                displayNotes(result.notes, result.average)
                 startUpdateTimer(System.currentTimeMillis())
             }
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n", "UseKtx")
-    private fun displayNotes(parsed: Map<String, List<Pair<Double, Double>>>) {
+    private fun displayNotes(parsedNotes: Map<String, List<NoteEntry>>,
+                             parsedAverages: Map<String, List<Pair<Double, Double>>>) {
         bind.notesContainer.removeAllViews()
 
-        val moyenneGenerale = Utils.computeGeneralAverage(parsed)
+        val allAverages = parsedAverages.values.flatten()
+        val moyenneGenerale = if (allAverages.isNotEmpty()) {
+            val totalWeight = allAverages.sumOf { it.second }
+            if (totalWeight != 0.0) allAverages.sumOf { it.first * it.second } / totalWeight else 0.0
+        } else null
 
         val generalCard = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
@@ -164,7 +172,7 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
         generalCard.addView(generalValue)
         bind.notesContainer.addView(generalCard)
 
-        parsed.forEach { (subject, notes) ->
+        parsedNotes.forEach { (subject, notes) ->
             val card = LinearLayout(requireContext()).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(20, 20, 20, 20)
@@ -185,20 +193,29 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
             }
             card.addView(title)
 
-            notes.forEach { (note, coef) ->
+            notes.forEach { entry ->
                 card.addView(
                     TextView(requireContext()).apply {
-                        text = "%.2f/20 (coef: %.2f)".format(note, coef)
+                        text = "%.2f/%.0f (coef: %.2f)".format(entry.note, entry.outOf, entry.coef)
                         setTextColor(Color.parseColor("#E8ECF2"))
                         textSize = 16f
                     }
                 )
             }
 
-            val moyenne = notes.sumOf { it.first * it.second } / notes.sumOf { it.second }
+            val moyenne = parsedAverages[subject]?.let { averages ->
+                val total = averages.sumOf { it.second }
+                if (total != 0.0) averages.sumOf { it.first * it.second } / total else null
+            } ?: run {
+                val total = notes.sumOf { it.coef }
+                if (total != 0.0) notes.sumOf {
+                    val note20 = if (it.outOf != 20.0) it.note * 20 / it.outOf else it.note
+                    note20 * it.coef
+                } / total else null
+            }
             card.addView(
                 TextView(requireContext()).apply {
-                    text = "Moyenne : %.2f/20".format(moyenne)
+                    text = moyenne?.let { "Moyenne : %.2f/20".format(it) } ?: "Moyenne : --/20"
                     setTextColor(Color.CYAN)
                     textSize = 16f
                     setTypeface(typeface, Typeface.BOLD)
