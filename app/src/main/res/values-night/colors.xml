@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Color Overrides -->
+    <color name="primaryTextColor">#E8EAED</color>
+    <color name="secondaryTextColor">#9AA0A6</color>
+</resources>
+

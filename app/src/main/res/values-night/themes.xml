@@ -1,19 +1,47 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.PronoteMoyenne" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Dark Theme - Papillon Style -->
+    <style name="Theme.PronoteMoyenne" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/primary_light</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimaryContainer">@color/on_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/primary_container</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="android:textColorPrimary">@color/primaryTextColor</item>
-        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
-        <item name="android:textColorHint">@android:color/white</item>
+        <item name="colorSecondary">@color/secondary_light</item>
+        <item name="colorSecondaryVariant">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondaryContainer">@color/on_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/secondary_container</item>
+
+        <!-- Background and Surface -->
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_dark</item>
+        <item name="colorOnBackground">@color/on_background_dark</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_dark</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/background_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/background_dark</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/on_background_dark</item>
+        <item name="android:textColorSecondary">@color/on_surface_variant_dark</item>
+        <item name="android:textColorHint">@color/on_surface_variant_dark</item>
+
+        <!-- Accent colors -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="colorErrorContainer">@color/error_container</item>
+
+        <!-- Shapes -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
     </style>
 </resources>

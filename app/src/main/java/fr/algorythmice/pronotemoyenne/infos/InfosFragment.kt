@@ -2,8 +2,6 @@ package fr.algorythmice.pronotemoyenne.infos
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import fr.algorythmice.pronotemoyenne.HomeActivity
 import fr.algorythmice.pronotemoyenne.R
@@ -26,20 +24,16 @@ class InfosFragment : Fragment(R.layout.fragment_infos) {
 
         if (studentName == null && className == null && establishment == null) {
             bind.emptyText.visibility = View.VISIBLE
+            bind.emptyTextCard.visibility = View.VISIBLE
             bind.infoCard.visibility = View.GONE
         } else {
             bind.emptyText.visibility = View.GONE
+            bind.emptyTextCard.visibility = View.GONE
             bind.infoCard.visibility = View.VISIBLE
 
             bind.studentName.text = studentName ?: "—"
             bind.className.text = className ?: "—"
             bind.establishment.text = establishment ?: "—"
-        }
-
-        bind.menuBtn.setOnClickListener {
-            (requireActivity() as HomeActivity)
-                .findViewById<DrawerLayout>(R.id.drawerLayout)
-                .openDrawer(GravityCompat.START)
         }
     }
 

@@ -10,14 +10,11 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import fr.algorythmice.pronotemoyenne.HomeActivity
 import fr.algorythmice.pronotemoyenne.R
 import fr.algorythmice.pronotemoyenne.SettingsActivity
-import fr.algorythmice.pronotemoyenne.Utils
 import fr.algorythmice.pronotemoyenne.databinding.FragmentNotesBinding
 import fr.algorythmice.pronotemoyenne.pronote.PronoteUtils
 import fr.algorythmice.pronotemoyenne.pronote.PronoteUtils.NoteEntry
@@ -41,17 +38,11 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
 
         _bind = FragmentNotesBinding.bind(view)
 
-
         bind.settingsBtn.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             (requireActivity() as HomeActivity).settingsLauncher.launch(intent)
         }
 
-        bind.menuBtn.setOnClickListener {
-            (requireActivity() as HomeActivity)
-                .findViewById<DrawerLayout>(R.id.drawerLayout)
-                .openDrawer(GravityCompat.START)
-        }
 
         loadNotes()
     }

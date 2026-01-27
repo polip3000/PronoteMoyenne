@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import fr.algorythmice.pronotemoyenne.grades.GradesFragment
 import fr.algorythmice.pronotemoyenne.homeworks.HomeworksFragment
@@ -19,37 +20,42 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val drawer = findViewById<DrawerLayout>(R.id.drawerLayout)
-        val navView = findViewById<NavigationView>(R.id.navigationView)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, GradesFragment(), "notesFragment")
-            .commit()
+        // Charge le fragment initial (Notes)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, GradesFragment(), "notesFragment")
+                .commit()
+        }
 
-
-        navView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.nav_notes -> {
+        // Configuration de la bottom navigation
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_grades -> {
                     openFragment(GradesFragment(), "notesFragment")
+                    true
                 }
-
-                R.id.nav_homework -> {
-                    openFragment(HomeworksFragment())
+                R.id.nav_homeworks -> {
+                    openFragment(HomeworksFragment(), "homeworksFragment")
+                    true
                 }
-
-                R.id.nav_profil -> {
-                    openFragment(InfosFragment())
+                R.id.nav_infos -> {
+                    openFragment(InfosFragment(), "infosFragment")
+                    true
                 }
-
                 R.id.nav_turboself -> {
                     openFragment(TurboSelfFragment(), "turboselfFragment")
+                    true
                 }
-
+                else -> false
             }
-            drawer.closeDrawers()
-            true
         }
+
+        // Sélectionne l'item des notes par défaut
+        bottomNav.selectedItemId = R.id.nav_grades
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     val settingsLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -90,8 +96,5 @@ class HomeActivity : AppCompatActivity() {
 
         transaction.commit()
     }
-
-
-
 
 }

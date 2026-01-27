@@ -6,8 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import fr.algorythmice.pronotemoyenne.HomeActivity
@@ -62,11 +60,6 @@ class TurboSelfFragment : Fragment(R.layout.fragment_turbo_self) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setupListeners() {
-        bind.menuBtn.setOnClickListener {
-            (requireActivity() as HomeActivity)
-                .findViewById<DrawerLayout>(R.id.drawerLayout)
-                .openDrawer(GravityCompat.START)
-        }
 
         bind.settingsBtn.setOnClickListener {
             goToTurboselfLogin()

@@ -9,8 +9,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import fr.algorythmice.pronotemoyenne.HomeActivity
@@ -38,11 +36,6 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
         _bind = FragmentHomeworksBinding.bind(view)
 
-        bind.menuBtn.setOnClickListener {
-            (requireActivity() as HomeActivity)
-                .findViewById<DrawerLayout>(R.id.drawerLayout)
-                .openDrawer(GravityCompat.START)
-        }
 
         loadHomeworks()
     }

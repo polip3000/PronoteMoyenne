@@ -1,116 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_gradient_futuristic_without_border"
-    android:padding="24dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?attr/android:colorBackground">
 
-    <LinearLayout
-        android:id="@+id/cardSettings"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_glass"
-        android:padding="20dp"
-        android:orientation="vertical"
-        android:elevation="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:text="@string/settings"
-            android:layout_width="match_parent"
+        <!-- Top Bar -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_gravity="center"/>
+            android:minHeight="?attr/actionBarSize"
+            android:background="?attr/android:colorBackground"
+            android:elevation="0dp"
+            app:title="@string/settings"
+            app:titleTextColor="?attr/colorOnBackground"
+            app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel"
+            app:navigationIconTint="?attr/colorOnBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+        <!-- Contenu -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginTop="25dp"
-            app:boxStrokeColor="@android:color/white"
-            app:boxStrokeWidth="2dp"
-            app:hintTextColor="@android:color/white">
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username"
+            <!-- Titre de section -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/username"
-                android:textColor="#FFFFFF"
-                android:textColorHint="@color/hint_text_color"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Connexion Pronote"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                android:layout_marginBottom="12dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:boxStrokeColor="@android:color/white"
-            app:boxStrokeWidth="2dp"
-            app:hintTextColor="@android:color/white"
-            app:passwordToggleEnabled="true">
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
+            <!-- Card des paramètres -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:textColor="#FFFFFF"
-                android:textColorHint="@color/hint_text_color"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                app:cardElevation="0dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/outline">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/entTextInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:hintTextColor="@android:color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
+                    <!-- Nom d'utilisateur -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/username"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary">
 
-            <!-- MaterialAutoCompleteTextView fournit la recherche/filtre intégré -->
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/entDropdown"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:textColor="?attr/colorOnSurface"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Mot de passe -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="@string/password"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:passwordToggleEnabled="true"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
+                        app:passwordToggleTint="?attr/colorOnSurfaceVariant">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="?attr/colorOnSurface"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- ENT -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/entTextInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="@string/select_ent"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/entDropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:completionThreshold="1"
+                            android:inputType="none"
+                            android:textColor="?attr/colorOnSurface"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Bouton trouver établissement -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/selectEtablissementBtn"
                 android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:completionThreshold="1"
-                android:hint="@string/select_ent"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:textColor="#FFFFFF"/>
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/find_my_establishment"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_menu_mylocation"
+                app:iconTint="@color/primary"
+                android:textColor="@color/primary"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <!-- Bouton Sauvegarder -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/save"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                style="@style/Widget.Material3.Button"
+                app:cornerRadius="12dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/on_primary"/>
 
-        <Button
-            android:id="@+id/selectEtablissementBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_neon"
-            android:text="@string/find_my_establishment"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@null"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/saveBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/btn_neon"
-            android:text="@string/save"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@null"/>
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -22,6 +22,11 @@ class SettingsActivity : AppCompatActivity() {
         bind = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
+        /* ---------- Toolbar ---------- */
+        bind.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         /* ---------- Pré-remplissage ---------- */
 
         bind.username.setText(LoginStorage.getUser(this))
