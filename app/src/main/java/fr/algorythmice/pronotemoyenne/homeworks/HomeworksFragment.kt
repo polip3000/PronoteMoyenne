@@ -36,14 +36,26 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
 
         _bind = FragmentHomeworksBinding.bind(view)
 
+        // Configuration du pull-to-refresh
+        bind.swipeRefreshLayout.setOnRefreshListener {
+            loadHomeworks(forceRefresh = true)
+        }
 
-        loadHomeworks()
+        loadHomeworks(forceRefresh = true)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         updateTimerJob?.cancel()
         _bind = null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        if (_bind != null) {
+            loadHomeworks(forceRefresh = true)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -75,17 +87,24 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun loadHomeworks() {
+    private fun loadHomeworks(forceRefresh: Boolean = false) {
         bind.loading.visibility = View.VISIBLE
-        bind.noteText.visibility = View.GONE
+        bind.loadingText.visibility = View.VISIBLE
+        bind.noteTextCard.visibility = View.GONE
         bind.notesContainer.removeAllViews()
 
-        val cachedRaw = HomeworksCacheStorage.loadHomeworks(requireContext())
-        if (!cachedRaw.isNullOrEmpty()) {
-            val parsed = PronoteUtils.parseHomeworks(cachedRaw)
-            displayHomeworks(parsed)
-            val lastUpdate = HomeworksCacheStorage.getLastUpdate(requireContext())
-            startUpdateTimer(lastUpdate)
+        // Ne charger le cache que si ce n'est pas un refresh forcé
+        if (!forceRefresh) {
+            val cachedRaw = HomeworksCacheStorage.loadHomeworks(requireContext())
+            if (!cachedRaw.isNullOrEmpty()) {
+                // Cacher le loading si on a des données en cache
+                bind.loading.visibility = View.GONE
+                bind.loadingText.visibility = View.GONE
+                val parsed = PronoteUtils.parseHomeworks(cachedRaw)
+                displayHomeworks(parsed)
+                val lastUpdate = HomeworksCacheStorage.getLastUpdate(requireContext())
+                startUpdateTimer(lastUpdate)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -94,14 +113,17 @@ class HomeworksFragment : Fragment(R.layout.fragment_homeworks) {
             }
 
             bind.loading.visibility = View.GONE
+            bind.loadingText.visibility = View.GONE
+            bind.swipeRefreshLayout.isRefreshing = false
 
             if (result.error != null) {
+                bind.noteTextCard.visibility = View.VISIBLE
                 bind.noteText.apply {
-                    visibility = View.VISIBLE
                     text = result.error
                     setTextColor(Color.RED)
                 }
             } else {
+                bind.noteTextCard.visibility = View.GONE
                 displayHomeworks(result.homework)
                 startUpdateTimer(System.currentTimeMillis())
             }

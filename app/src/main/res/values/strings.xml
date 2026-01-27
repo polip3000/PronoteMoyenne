@@ -26,6 +26,8 @@
     <string name="my_qr_code">Mon QR Code</string>
     <string name="qr_code">QR Code</string>
     <string name="recherche_tablissement">Recherche Etablissements</string>
-
-
+    <string name="connect_to_pronote">Connectez-vous à Pronote</string>
+    <string name="loading">Chargement…</string>
+    <string name="settings_description">Paramètres</string>
+    <string name="select_establishment_help">Utilisez le bouton ci-dessous pour sélectionner un établissement</string>
 </resources>

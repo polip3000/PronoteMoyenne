@@ -43,14 +43,26 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
             (requireActivity() as HomeActivity).settingsLauncher.launch(intent)
         }
 
+        // Configuration du pull-to-refresh
+        bind.swipeRefreshLayout.setOnRefreshListener {
+            reloadNotes()
+        }
 
-        loadNotes()
+        loadNotes(forceRefresh = true)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         updateTimerJob?.cancel()
         _bind = null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onResume() {
+        super.onResume()
+        if (_bind != null) {
+            reloadNotes()
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,7 +79,7 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
                 val diffYear = diffDay / 365
 
                 val text = when {
-                    diffMin < 1 -> "Mis à jour à l’instant"
+                    diffMin < 1 -> "Mis à jour à l'instant"
                     diffMin < 60 -> "Mis à jour il y a $diffMin min"
                     diffHour < 24 -> "Mis à jour il y a $diffHour h"
                     diffDay < 30 -> "Mis à jour il y a $diffDay jour${if (diffDay > 1) "s" else ""}"
@@ -75,7 +87,8 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
                     else -> "Mis à jour il y a $diffYear an${if (diffYear > 1) "s" else ""}"
                 }
 
-                bind.titleText.text = "Mes Notes\n$text"
+                bind.updateTimeText.text = text
+                bind.updateTimeText.visibility = View.VISIBLE
                 delay(60000)
             }
         }
@@ -84,22 +97,29 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun reloadNotes() {
         updateTimerJob?.cancel()
-        loadNotes()
+        loadNotes(forceRefresh = true)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun loadNotes() {
+    private fun loadNotes(forceRefresh: Boolean = false) {
         bind.loading.visibility = View.VISIBLE
-        bind.noteText.visibility = View.GONE
+        bind.loadingText.visibility = View.VISIBLE
+        bind.noteTextCard.visibility = View.GONE
         bind.notesContainer.removeAllViews()
 
-        val cachedNotes = GradesCacheStorage.loadNotes(requireContext())
-        val cachedAverages = AveragesCacheStorageCacheStorage.loadAverages(requireContext())
+        // Ne charger le cache que si ce n'est pas un refresh forcé
+        if (!forceRefresh) {
+            val cachedNotes = GradesCacheStorage.loadNotes(requireContext())
+            val cachedAverages = AveragesCacheStorageCacheStorage.loadAverages(requireContext())
 
-        if (!cachedNotes.isNullOrEmpty() && !cachedAverages.isNullOrEmpty()) {
-            displayNotes(cachedNotes, cachedAverages)
-            val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
-            startUpdateTimer(lastUpdate)
+            if (!cachedNotes.isNullOrEmpty() && !cachedAverages.isNullOrEmpty()) {
+                // Cacher le loading si on a des données en cache
+                bind.loading.visibility = View.GONE
+                bind.loadingText.visibility = View.GONE
+                displayNotes(cachedNotes, cachedAverages)
+                val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
+                startUpdateTimer(lastUpdate)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -108,14 +128,17 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
             }
 
             bind.loading.visibility = View.GONE
+            bind.loadingText.visibility = View.GONE
+            bind.swipeRefreshLayout.isRefreshing = false
 
             if (result.error != null) {
+                bind.noteTextCard.visibility = View.VISIBLE
                 bind.noteText.apply {
-                    visibility = View.VISIBLE
                     text = result.error
                     setTextColor(Color.RED)
                 }
             } else {
+                bind.noteTextCard.visibility = View.GONE
                 displayNotes(result.notes, result.average)
                 startUpdateTimer(System.currentTimeMillis())
             }

@@ -123,6 +123,28 @@
                             android:textColor="?attr/colorOnSurface"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Champ Établissement (lecture seule) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Établissement"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:boxStrokeColor="@color/primary"
+                        app:hintTextColor="@color/primary"
+                        app:endIconMode="none">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/establishmentField"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:text="Aucun établissement sélectionné"
+                            android:textColor="?attr/colorOnSurface"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

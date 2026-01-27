@@ -11,17 +11,6 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Logo et titre -->
-        <ImageView
-            android:id="@+id/logoImage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="48dp"
-            android:src="@drawable/logo"
-            android:contentDescription="@string/app_name"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/titleText"
@@ -32,21 +21,20 @@
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="?attr/colorOnBackground"
-            app:layout_constraintTop_toBottomOf="@id/logoImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:id="@+id/subtitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Connectez-vous à Pronote"
-            android:textSize="15sp"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            app:layout_constraintTop_toBottomOf="@id/titleText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/subtitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/connect_to_pronote"
+                android:textSize="15sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                app:layout_constraintTop_toBottomOf="@id/titleText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         <!-- Card de connexion -->
         <com.google.android.material.card.MaterialCardView
@@ -126,6 +114,40 @@
                         android:inputType="none"
                         android:textColor="?attr/colorOnSurface"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Champ Établissement (lecture seule) -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Établissement"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/primary"
+                    app:hintTextColor="@color/primary"
+                    app:endIconMode="none">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/establishmentField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:text="Aucun établissement sélectionné"
+                        android:textColor="?attr/colorOnSurface"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Texte d'aide pour indiquer qu'il faut sélectionner un établissement -->
+                <TextView
+                    android:id="@+id/entHelpText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/select_establishment_help"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

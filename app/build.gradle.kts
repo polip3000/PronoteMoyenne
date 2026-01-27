@@ -6,9 +6,7 @@ plugins {
 
 android {
     namespace = "fr.algorythmice.pronotemoyenne"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     buildFeatures{
         viewBinding = true
@@ -17,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "fr.algorythmice.pronotemoyenne"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 5
         versionName = "1.4"
 

@@ -1,65 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@drawable/bg_gradient_futuristic_without_border">
+    android:background="?attr/android:colorBackground">
 
-    <TextView
-        android:id="@+id/titleEtablissement"
-        android:layout_width="wrap_content"
+    <!-- Top Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/nearby_establishments"
-        android:textSize="22sp"
-        android:layout_marginTop="15dp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="20dp"/>
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/android:colorBackground"
+        android:elevation="0dp"
+        app:title="@string/nearby_establishments"
+        app:titleTextColor="?attr/colorOnBackground"
+        app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel"
+        app:navigationIconTint="?attr/colorOnBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <EditText
-        android:id="@+id/searchInput"
-        android:layout_width="match_parent"
+    <!-- Champ de recherche -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/searchCard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/name_of_the_establishment"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
-        android:textColor="#FFFFFF"
-        android:textColorHint="@color/hint_text_color"
-        tools:ignore="Autofill,TextFields" />
+        app:cardElevation="0dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/outline"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_of_the_establishment"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:hintTextColor="@color/primary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurface"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Liste des établissements -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/etablissementRecyclerView"
-        android:background="@drawable/bg_gradient_futuristic2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="25dp"
-        android:layout_weight="1"/>
+        android:layout_marginTop="16dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/searchCard"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Button
-        android:id="@+id/manualSearchBtn"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="@string/search_manually"
-        android:background="@drawable/btn_neon"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="70dp"
-        app:backgroundTint="@null"
-        android:textAllCaps="false"/>
+    <!-- Container pour les boutons -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="?attr/colorSurface"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/positionSearchBtn"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="@string/search_by_location"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/btn_neon"
-        android:layout_marginBottom="70dp"
-        android:visibility="gone"
-        app:backgroundTint="@null"
-        android:textAllCaps="false"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/manualSearchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/search_manually"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            app:strokeColor="@color/primary"
+            app:strokeWidth="1.5dp"
+            app:cornerRadius="12dp"
+            android:textColor="@color/primary"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/positionSearchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/search_by_location"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            style="@style/Widget.Material3.Button"
+            app:cornerRadius="12dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/on_primary"/>
+    </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -13,7 +13,7 @@ class EtablissementAdapter(
 ) : RecyclerView.Adapter<EtablissementAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameText: TextView = itemView.findViewById(android.R.id.text1)
+        val nameText: TextView = itemView.findViewById(R.id.nameText)
         init {
             itemView.setOnClickListener {
                 val position = bindingAdapterPosition
@@ -26,7 +26,7 @@ class EtablissementAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
+            .inflate(R.layout.item_etablissement, parent, false)
         return ViewHolder(view)
     }
 

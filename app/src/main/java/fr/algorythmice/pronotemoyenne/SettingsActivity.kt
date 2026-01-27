@@ -31,7 +31,25 @@ class SettingsActivity : AppCompatActivity() {
 
         bind.username.setText(LoginStorage.getUser(this))
         bind.password.setText(LoginStorage.getPass(this))
-        bind.entDropdown.setText(LoginStorage.getEnt(this))
+
+        // Pré-remplir l'ENT
+        val savedEnt = LoginStorage.getEnt(this)
+        if (!savedEnt.isNullOrEmpty()) {
+            bind.entDropdown.setText(savedEnt, false)
+        }
+
+        // Afficher le nom de l'établissement
+        val establishmentName = LoginStorage.getEstablishmentName(this)
+        if (!establishmentName.isNullOrEmpty()) {
+            bind.establishmentField.setText(establishmentName)
+        } else {
+            bind.establishmentField.setText("Aucun établissement sélectionné")
+        }
+
+        // Rendre le champ établissement cliquable
+        bind.establishmentField.setOnClickListener {
+            bind.selectEtablissementBtn.performClick()
+        }
 
         /* ---------- Configuration des propriétés des champs de saisie ---------- */
         bind.username.isSingleLine = true
@@ -51,9 +69,6 @@ class SettingsActivity : AppCompatActivity() {
 
         /* ---------- ENT dropdown ---------- */
 
-        bind.entDropdown.setDropDownBackgroundDrawable(
-            ContextCompat.getDrawable(this, R.drawable.bg_gradient_futuristic)
-        )
 
         val adapter = EntAdapter(this, R.layout.spinner_item, entList)
 
@@ -120,6 +135,13 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Rafraîchir l'affichage de l'établissement
+        val establishmentName = LoginStorage.getEstablishmentName(this)
+        if (!establishmentName.isNullOrEmpty()) {
+            bind.establishmentField.setText(establishmentName)
+        } else {
+            bind.establishmentField.setText("Aucun établissement sélectionné")
+        }
         updateSaveButtonState()
     }
 

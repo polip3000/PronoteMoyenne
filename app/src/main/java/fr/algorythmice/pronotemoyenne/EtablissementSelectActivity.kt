@@ -17,9 +17,10 @@ class EtablissementSelectActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchInput: EditText
+    private lateinit var searchCard: View
     private lateinit var manualSearchBtn: Button
     private lateinit var positionSearchBtn: Button
-    private lateinit var titleetablissement: TextView
+    private lateinit var toolbar: com.google.android.material.appbar.MaterialToolbar
     private lateinit var adapter: EtablissementAdapter
     private lateinit var allEtablissements: List<Establishment>
     private lateinit var etablissements: List<Establishment>
@@ -31,9 +32,15 @@ class EtablissementSelectActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.etablissementRecyclerView)
         searchInput = findViewById(R.id.searchInput)
+        searchCard = findViewById(R.id.searchCard)
         manualSearchBtn = findViewById(R.id.manualSearchBtn)
         positionSearchBtn = findViewById(R.id.positionSearchBtn)
-        titleetablissement = findViewById(R.id.titleEtablissement)
+        toolbar = findViewById(R.id.toolbar)
+
+        // Configuration du toolbar
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         etablissements =
             intent.getParcelableArrayListExtra<Establishment>("etablissements") ?: emptyList()
@@ -54,6 +61,7 @@ class EtablissementSelectActivity : AppCompatActivity() {
             recyclerView.layoutManager = LinearLayoutManager(this)
             adapter = EtablissementAdapter(list) { selected ->
                 LoginStorage.saveUrlPronote(this, selected.pronoteUrl)
+                LoginStorage.saveEstablishmentName(this, selected.officialName)
                 Toast.makeText(this, "Établissement enregistré", Toast.LENGTH_SHORT).show()
                 finish()
             }
@@ -63,10 +71,10 @@ class EtablissementSelectActivity : AppCompatActivity() {
         // Liste par défaut : établissements proches
         if (forceManual || etablissements.isEmpty() || !hasLocationPermission) {
             // Mode recherche manuelle direct
-            searchInput.visibility = View.VISIBLE
+            searchCard.visibility = View.VISIBLE
             manualSearchBtn.visibility = View.GONE
             positionSearchBtn.visibility = View.VISIBLE
-            titleetablissement.text = getString(R.string.recherche_tablissement)
+            toolbar.title = getString(R.string.recherche_tablissement)
 
             positionSearchBtn.apply {
                 isEnabled = false
@@ -75,6 +83,7 @@ class EtablissementSelectActivity : AppCompatActivity() {
 
             adapter = EtablissementAdapter(allEtablissements) { selected ->
                 LoginStorage.saveUrlPronote(this, selected.pronoteUrl)
+                LoginStorage.saveEstablishmentName(this, selected.officialName)
                 Toast.makeText(this, "Établissement enregistré", Toast.LENGTH_SHORT).show()
                 finish()
             }
@@ -85,17 +94,17 @@ class EtablissementSelectActivity : AppCompatActivity() {
         } else {
             // Mode établissements proches
             showList(etablissements)
-            searchInput.visibility = View.GONE
+            searchCard.visibility = View.GONE
             manualSearchBtn.visibility = View.VISIBLE
             positionSearchBtn.visibility = View.GONE
         }
 
         // Recherche manuelle
         manualSearchBtn.setOnClickListener {
-            searchInput.visibility = View.VISIBLE
+            searchCard.visibility = View.VISIBLE
             manualSearchBtn.visibility = View.GONE
             positionSearchBtn.visibility = View.VISIBLE
-            titleetablissement.text = getString(R.string.recherche_tablissement)
+            toolbar.title = getString(R.string.recherche_tablissement)
 
             searchInput.setText("")
             searchInput.requestFocus()
@@ -114,10 +123,10 @@ class EtablissementSelectActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            searchInput.visibility = View.GONE
+            searchCard.visibility = View.GONE
             manualSearchBtn.visibility = View.VISIBLE
             positionSearchBtn.visibility = View.GONE
-            titleetablissement.text = getString(R.string.nearby_establishments)
+            toolbar.title = getString(R.string.nearby_establishments)
             showList(etablissements)
         }
 

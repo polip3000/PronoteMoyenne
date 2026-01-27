@@ -9,6 +9,7 @@ object LoginStorage {
     private const val KEY_PASS = "password"
     private const val KEY_ENT = "ent"
     private const val KEY_URL_PRONOTE = "url_pronote"
+    private const val KEY_ESTABLISHMENT_NAME = "establishment_name"
 
     fun save(context: Context, user: String, pass: String, ent: String) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {
@@ -21,6 +22,12 @@ object LoginStorage {
     fun saveUrlPronote(context: Context, urlPronote: String) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {
                 putString(KEY_URL_PRONOTE, urlPronote)
+        }
+    }
+
+    fun saveEstablishmentName(context: Context, name: String) {
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {
+                putString(KEY_ESTABLISHMENT_NAME, name)
         }
     }
 
@@ -39,6 +46,10 @@ object LoginStorage {
     fun getUrlPronote(context: Context): String? =
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .getString(KEY_URL_PRONOTE, null)
+
+    fun getEstablishmentName(context: Context): String? =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_ESTABLISHMENT_NAME, null)
 
     fun clear(context: Context) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import fr.algorythmice.pronotemoyenne.EntListData.entList
 import fr.algorythmice.pronotemoyenne.databinding.ActivityMainBinding
@@ -30,9 +29,29 @@ class MainActivity : AppCompatActivity() {
                 return
             }
 
-
             bind = ActivityMainBinding.inflate(layoutInflater)
             setContentView(bind.root)
+
+            // Afficher le nom de l'établissement s'il existe
+            val establishmentName = LoginStorage.getEstablishmentName(this)
+            if (!establishmentName.isNullOrEmpty()) {
+                bind.establishmentField.setText(establishmentName)
+                bind.entHelpText.visibility = android.view.View.GONE
+            } else {
+                bind.establishmentField.setText("Aucun établissement sélectionné")
+                bind.entHelpText.visibility = android.view.View.VISIBLE
+            }
+
+            // Pré-remplir l'ENT
+            val savedEnt = LoginStorage.getEnt(this)
+            if (!savedEnt.isNullOrEmpty()) {
+                bind.entDropdown.setText(savedEnt, false)
+            }
+
+            // Rendre le champ établissement cliquable pour ouvrir la sélection
+            bind.establishmentField.setOnClickListener {
+                bind.findNearbyBtn.performClick()
+            }
 
             bind.loginBtn.isEnabled = false
             bind.loginBtn.alpha = 0.4f
@@ -53,6 +72,18 @@ class MainActivity : AppCompatActivity() {
             bind.username.isSingleLine = true
             bind.username.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
             bind.password.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+
+            // Configuration du dropdown ENT
+            val adapter = EntAdapter(this, R.layout.spinner_item, entList)
+            (bind.entDropdown as AutoCompleteTextView).apply {
+                setAdapter(adapter)
+                threshold = 1
+            }
+
+            bind.entDropdown.setOnItemClickListener { _, _, _, _ ->
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(bind.entDropdown.windowToken, 0)
+            }
 
 
             val json = Utils.loadJsonFromAssets(this, "etablissements.json")
@@ -110,23 +141,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            bind.entDropdown.setDropDownBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.bg_gradient_futuristic))
-
-            val adapter = EntAdapter(
-                this,
-                R.layout.spinner_item,
-                entList
-            )
-
-            (bind.entDropdown as AutoCompleteTextView).apply {
-                setAdapter(adapter)
-                threshold = 1
-            }
-
-            bind.entDropdown.setOnItemClickListener { _, _, _, _ ->
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(bind.entDropdown.windowToken, 0)
-            }
 
 
             bind.loginBtn.setOnClickListener {
@@ -150,6 +164,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Rafraîchir l'affichage de l'établissement
+        val establishmentName = LoginStorage.getEstablishmentName(this)
+        if (!establishmentName.isNullOrEmpty()) {
+            bind.establishmentField.setText(establishmentName)
+            bind.entHelpText.visibility = android.view.View.GONE
+        } else {
+            bind.establishmentField.setText("Aucun établissement sélectionné")
+            bind.entHelpText.visibility = android.view.View.VISIBLE
+        }
         updateLoginButtonState()
     }
 
