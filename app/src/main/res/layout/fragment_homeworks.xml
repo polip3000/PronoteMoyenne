@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:padding="32dp">
+                    android:padding="16dp">
 
                     <ProgressBar
                         android:id="@+id/loading"

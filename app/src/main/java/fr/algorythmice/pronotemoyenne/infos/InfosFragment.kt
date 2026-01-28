@@ -3,7 +3,6 @@ package fr.algorythmice.pronotemoyenne.infos
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import fr.algorythmice.pronotemoyenne.HomeActivity
 import fr.algorythmice.pronotemoyenne.R
 import fr.algorythmice.pronotemoyenne.databinding.FragmentInfosBinding
 

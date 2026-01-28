@@ -21,6 +21,7 @@
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="?attr/colorOnBackground"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -46,7 +47,7 @@
             app:cardCornerRadius="20dp"
             app:cardBackgroundColor="?attr/colorSurface"
             app:strokeWidth="1dp"
-            app:strokeColor="@color/outline"
+            app:strokeColor="@color/outline_dark"
             app:layout_constraintTop_toBottomOf="@id/subtitleText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -132,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="none"
                         android:focusable="false"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:text="Aucun établissement sélectionné"
                         android:textColor="?attr/colorOnSurface"/>
                 </com.google.android.material.textfield.TextInputLayout>

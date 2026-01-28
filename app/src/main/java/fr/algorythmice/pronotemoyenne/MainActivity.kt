@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             bind = ActivityMainBinding.inflate(layoutInflater)
             setContentView(bind.root)
 
-            // Afficher le nom de l'établissement s'il existe
             val establishmentName = LoginStorage.getEstablishmentName(this)
             if (!establishmentName.isNullOrEmpty()) {
                 bind.establishmentField.setText(establishmentName)
@@ -42,15 +41,9 @@ class MainActivity : AppCompatActivity() {
                 bind.entHelpText.visibility = android.view.View.VISIBLE
             }
 
-            // Pré-remplir l'ENT
             val savedEnt = LoginStorage.getEnt(this)
             if (!savedEnt.isNullOrEmpty()) {
                 bind.entDropdown.setText(savedEnt, false)
-            }
-
-            // Rendre le champ établissement cliquable pour ouvrir la sélection
-            bind.establishmentField.setOnClickListener {
-                bind.findNearbyBtn.performClick()
             }
 
             bind.loginBtn.isEnabled = false
@@ -68,12 +61,10 @@ class MainActivity : AppCompatActivity() {
                 updateLoginButtonState()
             }
 
-            //configuration des propriétés des champs de saisie
             bind.username.isSingleLine = true
             bind.username.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
             bind.password.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 
-            // Configuration du dropdown ENT
             val adapter = EntAdapter(this, R.layout.spinner_item, entList)
             (bind.entDropdown as AutoCompleteTextView).apply {
                 setAdapter(adapter)
@@ -99,7 +90,6 @@ class MainActivity : AppCompatActivity() {
                     if (granted) {
                         bind.findNearbyBtn.performClick()
                     } else {
-                        // Permission refusée → recherche manuelle directe
                         openManualSearch()
                     }
                 }

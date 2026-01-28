@@ -7,7 +7,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import fr.algorythmice.pronotemoyenne.databinding.ActivitySettingsBinding
 import fr.algorythmice.pronotemoyenne.EntListData.entList
@@ -32,23 +31,16 @@ class SettingsActivity : AppCompatActivity() {
         bind.username.setText(LoginStorage.getUser(this))
         bind.password.setText(LoginStorage.getPass(this))
 
-        // Pré-remplir l'ENT
         val savedEnt = LoginStorage.getEnt(this)
         if (!savedEnt.isNullOrEmpty()) {
             bind.entDropdown.setText(savedEnt, false)
         }
 
-        // Afficher le nom de l'établissement
         val establishmentName = LoginStorage.getEstablishmentName(this)
         if (!establishmentName.isNullOrEmpty()) {
             bind.establishmentField.setText(establishmentName)
         } else {
             bind.establishmentField.setText("Aucun établissement sélectionné")
-        }
-
-        // Rendre le champ établissement cliquable
-        bind.establishmentField.setOnClickListener {
-            bind.selectEtablissementBtn.performClick()
         }
 
         /* ---------- Configuration des propriétés des champs de saisie ---------- */

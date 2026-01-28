@@ -35,7 +35,7 @@
         app:cardCornerRadius="12dp"
         app:cardBackgroundColor="?attr/colorSurface"
         app:strokeWidth="1dp"
-        app:strokeColor="@color/outline"
+        app:strokeColor="@color/outline_dark"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

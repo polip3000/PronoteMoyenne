@@ -43,12 +43,11 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
             (requireActivity() as HomeActivity).settingsLauncher.launch(intent)
         }
 
-        // Configuration du pull-to-refresh
         bind.swipeRefreshLayout.setOnRefreshListener {
             reloadNotes()
         }
 
-        loadNotes(forceRefresh = true)
+        loadNotes()
     }
 
     override fun onDestroyView() {
@@ -97,29 +96,21 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun reloadNotes() {
         updateTimerJob?.cancel()
-        loadNotes(forceRefresh = true)
+        loadNotes()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun loadNotes(forceRefresh: Boolean = false) {
-        bind.loading.visibility = View.VISIBLE
-        bind.loadingText.visibility = View.VISIBLE
+    private fun loadNotes() {
+        bind.loadingContainer.visibility = View.VISIBLE
         bind.noteTextCard.visibility = View.GONE
-        bind.notesContainer.removeAllViews()
 
-        // Ne charger le cache que si ce n'est pas un refresh forcé
-        if (!forceRefresh) {
-            val cachedNotes = GradesCacheStorage.loadNotes(requireContext())
-            val cachedAverages = AveragesCacheStorageCacheStorage.loadAverages(requireContext())
+        val cachedNotes = GradesCacheStorage.loadNotes(requireContext())
+        val cachedAverages = AveragesCacheStorageCacheStorage.loadAverages(requireContext())
 
-            if (!cachedNotes.isNullOrEmpty() && !cachedAverages.isNullOrEmpty()) {
-                // Cacher le loading si on a des données en cache
-                bind.loading.visibility = View.GONE
-                bind.loadingText.visibility = View.GONE
-                displayNotes(cachedNotes, cachedAverages)
-                val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
-                startUpdateTimer(lastUpdate)
-            }
+        if (!cachedNotes.isNullOrEmpty() && !cachedAverages.isNullOrEmpty()) {
+            displayNotes(cachedNotes, cachedAverages)
+            val lastUpdate = GradesCacheStorage.getLastUpdate(requireContext())
+            startUpdateTimer(lastUpdate)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -127,8 +118,7 @@ class GradesFragment : Fragment(R.layout.fragment_notes) {
                 PronoteUtils.syncPronoteData(requireContext())
             }
 
-            bind.loading.visibility = View.GONE
-            bind.loadingText.visibility = View.GONE
+            bind.loadingContainer.visibility = View.GONE
             bind.swipeRefreshLayout.isRefreshing = false
 
             if (result.error != null) {

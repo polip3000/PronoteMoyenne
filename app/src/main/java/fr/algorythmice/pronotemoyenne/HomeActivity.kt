@@ -22,14 +22,12 @@ class HomeActivity : AppCompatActivity() {
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        // Charge le fragment initial (Notes)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, GradesFragment(), "notesFragment")
                 .commit()
         }
 
-        // Configuration de la bottom navigation
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_grades -> {
@@ -52,7 +50,6 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        // Sélectionne l'item des notes par défaut
         bottomNav.selectedItemId = R.id.nav_grades
     }
 
@@ -79,7 +76,6 @@ class HomeActivity : AppCompatActivity() {
     private fun openFragment(fragment: Fragment, tag: String? = null) {
         val transaction = supportFragmentManager.beginTransaction()
 
-        // Cache tous les fragments déjà ajoutés
         supportFragmentManager.fragments.forEach {
             transaction.hide(it)
         }
@@ -87,10 +83,8 @@ class HomeActivity : AppCompatActivity() {
         val existingFragment = tag?.let { supportFragmentManager.findFragmentByTag(it) }
 
         if (existingFragment != null) {
-            // Affiche le fragment existant
             transaction.show(existingFragment)
         } else {
-            // Ajoute le nouveau fragment
             transaction.add(R.id.fragmentContainer, fragment, tag)
         }
 

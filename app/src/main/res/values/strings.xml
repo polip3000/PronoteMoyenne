@@ -12,6 +12,7 @@
     <string name="search_by_location">Rechercher avec la position</string>
     <string name="please_fill_in_the_fields">Veuillez remplir les champs</string>
     <string name="connection_to_turboself">Connexion\nTurboself</string>
+    <string name="turboself_subtitle">Connectez-vous à votre compte TurboSelf</string>
     <string name="return_btn">Retour</string>
     <string name="settings">Paramètres</string>
     <string name="save">Enregistrer</string>

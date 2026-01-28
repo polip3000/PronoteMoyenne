@@ -26,11 +26,11 @@
     <color name="surface_variant_dark">#252C36</color>
 
     <!-- Text Colors -->
-    <color name="on_background">#1A1F27</color>
+    <color name="on_background">#E8EAED</color>
     <color name="on_background_dark">#E8EAED</color>
-    <color name="on_surface">#1A1F27</color>
+    <color name="on_surface">#E8EAED</color>
     <color name="on_surface_dark">#E8EAED</color>
-    <color name="on_surface_variant">#5F6368</color>
+    <color name="on_surface_variant">#9AA0A6</color>
     <color name="on_surface_variant_dark">#9AA0A6</color>
 
     <!-- Accent Colors -->

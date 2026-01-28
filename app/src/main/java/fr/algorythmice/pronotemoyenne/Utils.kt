@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi
 import com.google.android.gms.location.Priority
 import kotlinx.parcelize.Parcelize
 import kotlin.math.*
-import fr.algorythmice.pronotemoyenne.pronote.PronoteUtils.NoteEntry
 
 object Utils {
 
